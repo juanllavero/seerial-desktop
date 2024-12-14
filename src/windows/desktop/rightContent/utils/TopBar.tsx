@@ -7,6 +7,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
 import "./TopBar.scss";
+import { useState, useEffect } from "react";
 
 /**
  * TopBar component renders the top bar of the application window.
@@ -20,28 +21,39 @@ function TopBar(): JSX.Element {
 		(state: RootState) => state.windowState.isMaximized
 	);
 
+	const [isWindows, setIsWindows] = useState(false);
+
+	useEffect(() => {
+		const userAgent = navigator.userAgent;
+		if (userAgent.includes("Windows")) {
+			setIsWindows(true);
+		}
+	}, []);
+
 	return (
 		<div className="top-bar">
-			<div className="window-buttons-container">
-				<button
-					className="window-button minimize-button"
-					onClick={() => window.electronAPI.minimizeWindow()}
-				>
-					<WindowMinIcon />
-				</button>
-				<button
-					className="window-button maximize-button"
-					onClick={() => window.electronAPI.maximizeWindow()}
-				>
-					{isMaximized ? <WindowRestoreIcon /> : <WindowMaxIcon />}
-				</button>
-				<button
-					className="window-button close-button"
-					onClick={() => window.electronAPI.closeWindow()}
-				>
-					<WindowCloseIcon />
-				</button>
-			</div>
+			{isWindows && (
+				<div className="window-buttons-container">
+					<button
+						className="window-button minimize-button"
+						onClick={() => window.electronAPI.minimizeWindow()}
+					>
+						<WindowMinIcon />
+					</button>
+					<button
+						className="window-button maximize-button"
+						onClick={() => window.electronAPI.maximizeWindow()}
+					>
+						{isMaximized ? <WindowRestoreIcon /> : <WindowMaxIcon />}
+					</button>
+					<button
+						className="window-button close-button"
+						onClick={() => window.electronAPI.closeWindow()}
+					>
+						<WindowCloseIcon />
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }

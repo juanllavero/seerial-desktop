@@ -73,15 +73,6 @@ function MainDesktop() {
 	);
 	const [gradientBackground, setGradientBackground] = useState<string>("");
 
-	const [isWindows, setIsWindows] = useState(false);
-
-	useEffect(() => {
-		const userAgent = navigator.userAgent;
-		if (userAgent.includes("Windows")) {
-			setIsWindows(true);
-		}
-	}, []);
-
 	useEffect(() => {
 		if (data) {
 			dispatch(setLibraries(data));
@@ -292,7 +283,7 @@ function MainDesktop() {
 
 				{/* Right Panel */}
 				<section className="right-panel">
-					{isWindows && <TopBar />}
+					<TopBar />
 					{loading ? (
 						<Loading />
 					) : error ? (

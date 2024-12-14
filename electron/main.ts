@@ -52,7 +52,7 @@ function saveConfig(config: Record<string, any>): void {
 let configData = loadOrCreateConfig();
 
 // IPC Handlers para `get` y `set`
-ipcMain.handle("get-config", (_event, key: string, defaultValue: any) => {
+/*ipcMain.handle("get-config", (_event, key: string, defaultValue: any) => {
 	if (!(key in configData)) {
 		configData[key] = defaultValue;
 		saveConfig(configData);
@@ -63,7 +63,7 @@ ipcMain.handle("get-config", (_event, key: string, defaultValue: any) => {
 ipcMain.handle("set-config", (_event, key: string, value: any) => {
 	configData[key] = value;
 	saveConfig(configData);
-});
+});*/
 //#endregion
 
 //#region LOCALIZATION
