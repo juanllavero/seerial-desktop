@@ -117,7 +117,7 @@ function ShowsCard({ element }: { element: SeriesData }) {
 					alt="Poster"
 					width={seriesImageWidth}
 					height={seriesImageWidth}
-					errorSrc="./src/resources/img/songDefault.png"
+					errorSrc="/img/songDefault.png"
 					isRelative={false}
 				/>
 			) : (
@@ -132,7 +132,7 @@ function ShowsCard({ element }: { element: SeriesData }) {
 					alt="Poster"
 					width={seriesImageWidth}
 					height={seriesImageHeight}
-					errorSrc="./src/resources/img/fileNotFound.jpg"
+					errorSrc="/img/fileNotFound.jpg"
 					isRelative={true}
 				/>
 			)}

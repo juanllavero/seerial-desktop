@@ -235,7 +235,7 @@ function DetailsSection() {
 									}
 									alt="Poster"
 									isRelative={true}
-									errorSrc="./src/resources/img/fileNotFound.jpg"
+									errorSrc="/img/fileNotFound.jpg"
 								/>
 							) : (
 								<Image
@@ -244,7 +244,7 @@ function DetailsSection() {
 									}
 									alt="Poster"
 									isRelative={true}
-									errorSrc="./src/resources/img/fileNotFound.jpg"
+									errorSrc="/img/fileNotFound.jpg"
 								/>
 							)}
 							{selectedLibrary.type === "Shows" &&

@@ -74,7 +74,7 @@ const MusicTable: React.FC<MusicViewProps> = ({ selectedLibrary }) => {
 					style={{ width: `50px`, height: `50px` }}
 					onError={(e: any) => {
 						e.target.onerror = null;
-						e.target.src = "./src/resources/img/songDefault.png";
+						e.target.src = "/img/songDefault.png";
 					}}
 				/>
 				<div className="song-btn-overlay">

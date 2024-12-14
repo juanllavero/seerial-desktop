@@ -752,7 +752,7 @@ function Controls() {
 								(chapter: ChapterData, index: number) => (
 									<div key={chapter.title}>
 										<img
-											src="./src/resources/img/black.png"
+											src="/img/black.png"
 											alt="Chapter thumbnail"
 											className={
 												isCurrentChapter(chapter)

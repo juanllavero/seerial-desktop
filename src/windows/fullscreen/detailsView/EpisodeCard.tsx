@@ -29,12 +29,12 @@ function EpisodeCard({ episode, index, listRef }: { episode: EpisodeData, index:
 					alt="Poster"
 					onError={(e: any) => {
 						e.target.onerror = null; // To avoid infinite loop
-						e.target.src = "./src/resources/img/defaultThumbnail.jpg";
+						e.target.src = "/img/defaultThumbnail.jpg";
 					}}
 				/>
 			) : (
 				<ResolvedImage
-					src="resources/img/defaultThumbnail.jpg"
+					src="/img/defaultThumbnail.jpg"
 					alt="Poster"
 				/>
 			)}

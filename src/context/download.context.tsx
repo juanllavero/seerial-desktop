@@ -1,4 +1,3 @@
-import { ReactUtils } from "@data/utils/ReactUtils";
 import { MediaSearchResult } from "@interfaces/SearchResults";
 import React, { useContext, useEffect } from "react";
 

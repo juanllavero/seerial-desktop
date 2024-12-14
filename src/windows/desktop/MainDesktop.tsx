@@ -82,7 +82,7 @@ function MainDesktop() {
 			if (selectedSeason.coverSrc !== "") {
 				ReactUtils.getDominantColors(selectedSeason.coverSrc);
 			} else {
-				ReactUtils.getDominantColors("./src/resources/img/songDefault.png");
+				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
 
 			setTimeout(() => {

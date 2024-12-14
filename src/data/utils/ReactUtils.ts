@@ -56,7 +56,7 @@ export class ReactUtils {
 			if (collection.coverSrc !== "") {
 				ReactUtils.getDominantColors(collection.coverSrc);
 			} else {
-				ReactUtils.getDominantColors("./src/resources/img/songDefault.png");
+				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
 		} else if (collection && album) {
 			if (album.coverSrc !== "") {
@@ -64,7 +64,7 @@ export class ReactUtils {
 			} else if (collection.coverSrc !== "") {
 				ReactUtils.getDominantColors(collection.coverSrc);
 			} else {
-				ReactUtils.getDominantColors("./src/resources/img/songDefault.png");
+				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
 		}
 	};
@@ -158,12 +158,7 @@ export class ReactUtils {
 	public static saveLibraries = (newData: LibraryData[]) => {
 		if (newData.length === 0) return;
 
-		//@ts-ignore
-		window.electronAPI.saveLibraryData(newData).then((success: boolean) => {
-			if (!success) {
-				console.error("Error saving data");
-			}
-		});
+		console.log("Saving libraries data...");
 	};
 
 	/**

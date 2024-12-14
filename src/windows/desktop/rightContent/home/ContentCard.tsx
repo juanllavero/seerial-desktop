@@ -110,7 +110,7 @@ function ContentCard({ library, show, season, episode }: ContentCardProps) {
 						width={episodeImageWidth}
 						height={episodeImageHeight}
 						alt="Video Thumbnail"
-						errorSrc="./src/resources/img/Default_video_thumbnail.jpg"
+						errorSrc="/img/Default_video_thumbnail.jpg"
 						isRelative={true}
 					/>
 				</div>

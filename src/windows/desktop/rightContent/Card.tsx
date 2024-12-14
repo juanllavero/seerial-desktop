@@ -149,12 +149,12 @@ function Card(props: CardProps): JSX.Element {
 									  show.seasons.length > 0 &&
 									  show.seasons[0].coverSrc !== ""
 									? show.seasons[0].coverSrc
-									: "resources/img/fileNotFound.jpg"
+									: "/img/fileNotFound.jpg"
 							}
 							alt="Poster"
 							width={seriesImageWidth}
 							height={seriesImageHeight}
-							errorSrc="./src/resources/img/fileNotFound.jpg"
+							errorSrc="/img/fileNotFound.jpg"
 							isRelative={true}
 						/>
 					) : (
@@ -164,12 +164,12 @@ function Card(props: CardProps): JSX.Element {
 									? show.coverSrc
 									: season
 									? season.coverSrc
-									: "./src/resources/img/songDefault.png"
+									: "/img/songDefault.png"
 							}
 							alt="Poster"
 							width={seriesImageWidth}
 							height={seriesImageWidth}
-							errorSrc="./src/resources/img/songDefault.png"
+							errorSrc="/img/songDefault.png"
 							isRelative={true}
 						/>
 					)}

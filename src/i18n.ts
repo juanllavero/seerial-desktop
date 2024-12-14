@@ -5,12 +5,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 // Initialization
 i18n
-  .use(HttpBackend) // Load localizations from the backend (Crowdin)
+  .use(HttpBackend) // Load localizations from the backend
   .use(LanguageDetector) // Detect browser language
   .use(initReactI18next) // React integration
   .init({
     fallbackLng: 'en-US', // Default language
-    supportedLngs: ['en-US', 'es-ES', 'de-DE', 'fr-FR', 'it-IT'], // Supported languages
+    supportedLngs: ['en', 'en-US', 'es', 'es-ES', 'de', 'de-DE', 'fr', 'fr-FR', 'it', 'it-IT'],
     debug: true,
     interpolation: {
       escapeValue: false,

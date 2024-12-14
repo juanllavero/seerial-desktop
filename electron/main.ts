@@ -2,22 +2,14 @@ import { app, BrowserWindow, dialog, ipcMain, screen } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "path";
 import * as fs from "fs";
-import axios from "axios";
 
 import { MPVController } from "../src/data/objects/MPVController";
-import propertiesReader from "properties-reader";
-
-import { MovieDb } from "moviedb-promise";
 import i18next from "i18next";
 import Backend from "i18next-fs-backend";
 import { LibraryData } from "@interfaces/LibraryData";
 import { SeriesData } from "@interfaces/SeriesData";
 import { SeasonData } from "@interfaces/SeasonData";
 import { EpisodeData } from "@interfaces/EpisodeData";
-import { Utils } from "../src/data/utils/Utils";
-import { Library } from "../src/data/objects/Library";
-import { DataManager } from "../src/data/utils/DataManager";
-import { Downloader } from "../src/data/utils/Downloader";
 
 //#region PROPERTIES AND DATA READING
 
@@ -74,58 +66,6 @@ ipcMain.handle("set-config", (_event, key: string, value: any) => {
 });
 //#endregion
 
-ipcMain.handle(
-	"search-yt",
-	async (_event, query: string, numberOfResults: number) => {
-		return await Downloader.searchVideos(query, numberOfResults);
-	}
-);
-
-ipcMain.handle(
-	"start-download",
-	async (_event, { url, downloadFolder, fileName, isVideo }) => {
-		if (!win) return;
-
-		try {
-			if (isVideo)
-				await Downloader.downloadVideo(url, downloadFolder, fileName, win);
-			else
-				await Downloader.downloadAudio(url, downloadFolder, fileName, win);
-		} catch (error: any) {
-			win.webContents.send("download-error", error.message);
-		}
-	}
-);
-
-ipcMain.handle("get-files", async (_event, folder: string) => {
-	return await Utils.getFilesInFolder(Utils.getExternalPath(folder));
-});
-
-//#region EXTERNAL PATHS
-/**
- * Returns the absolute path to a relative external path by checking if the application is in development or production.
- * @param relativePath Relative path to a file or folder outside the application
- * @returns The absolute path to that file or folder
- */
-
-ipcMain.handle("get-external-path", async (_event, relativePath: string) => {
-	try {
-		// Llama a la función para obtener la ruta absoluta
-		const absolutePath = Utils.getExternalPath(relativePath);
-
-		// Verifica que el path sea una cadena válida
-		if (typeof absolutePath !== "string") {
-			throw new Error("Invalid path type");
-		}
-
-		return absolutePath;
-	} catch (error) {
-		console.error("Error in IPC handler for get-external-path:", error);
-		throw error; // Propagar el error para que pueda ser manejado en el renderer
-	}
-});
-//#endregion
-
 //#region LOCALIZATION
 i18next.use(Backend).init({
 	fallbackLng: "en-US",
@@ -141,127 +81,6 @@ ipcMain.handle("translate", (_event, key) => {
 });
 //#endregion
 
-//#region GET FILES
-ipcMain.handle("get-images", async (_event, dirPath) => {
-	return DataManager.getImages(dirPath);
-});
-//#endregion
-
-//#region DOWNLOAD IMAGES
-ipcMain.handle(
-	"download-image-url",
-	async (_event, imageUrl: string, downloadDir: string) => {
-		try {
-			// Create folder if not exists
-			const folderPath = Utils.getExternalPath(downloadDir);
-			if (!fs.existsSync(folderPath)) {
-				fs.mkdirSync(folderPath);
-			}
-
-			const fileName = imageUrl.split("/").pop();
-
-			if (!fileName) return;
-
-			const imagePath = path.join(folderPath, fileName);
-
-			// Download image
-			const response = await axios({
-				url: imageUrl,
-				responseType: "stream",
-			});
-
-			// Save image with a promise
-			await new Promise((resolve, reject) => {
-				const writer = fs.createWriteStream(imagePath);
-				response.data.pipe(writer);
-				writer.on("finish", resolve);
-				writer.on("error", reject);
-			});
-
-			return true; // Successfully downloaded and saved
-		} catch (error: any) {
-			console.error(
-				"download-error",
-				`Error downloading image: ${error.message}`
-			);
-
-			return false;
-		}
-	}
-);
-
-ipcMain.handle(
-	"copy-image-file",
-	async (_event, originalSrc: string, destSrc: string) => {
-		if (!fs.existsSync(originalSrc)) {
-			console.error(`No file found: ${originalSrc}`);
-			return;
-		}
-
-		fs.copyFile(originalSrc, destSrc, (err) => {
-			if (err) {
-				console.error("Error copying image:", err);
-				return;
-			}
-		});
-	}
-);
-
-ipcMain.handle("file-exists", (_event, filePath: string) => {
-	return fs.existsSync(filePath);
-});
-
-ipcMain.handle("save-background", async (_event, seasonId: string, imageToCopy: string) => {
-	await Utils.saveBackgroundNoSeason(seasonId, imageToCopy);
-});
-//#endregion
-
-//#region MEDIA INFO
-const getMediaInfo = async (episode: EpisodeData) => {
-	return await Utils.getMediaInfo(episode);
-};
-
-ipcMain.handle("get-video-data", async (_event, episode: EpisodeData) => {
-	return getMediaInfo(episode);
-});
-//#endregion
-
-//#region METADATA DOWNLOAD
-
-DataManager.initFolders();
-
-ipcMain.handle("scan-files", async (_event, library: LibraryData) => {
-	let newLibrary: Library | undefined = new Library(
-		library.name,
-		library.language,
-		library.type,
-		library.order,
-		library.folders
-	);
-	newLibrary = await DataManager.scanFiles(newLibrary);
-});
-
-ipcMain.on("update-library", (_event, library: LibraryData) => {
-	win?.webContents.send("update-library", library);
-});
-
-ipcMain.on("get-libraries", async (_event) => {
-	let libraries = DataManager.getLibraries();
-
-	win?.webContents.send(
-		"send-libraries",
-		libraries.map((library: Library) => library.toLibraryData())
-	);
-});
-
-export function sendLibraries(libraries: LibraryData[]) {
-	if (win) {
-		win.webContents.send("send-libraries", libraries);
-	}
-}
-
-//#endregion
-
 //#region WINDOWS CREATION
 function createWindow() {
 	const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -272,8 +91,8 @@ function createWindow() {
 	win = new BrowserWindow({
 		width: windowWidth,
 		height: windowHeight,
-		minWidth: 720,
-		minHeight: 400,
+		minWidth: 820,
+		minHeight: 500,
 		alwaysOnTop: false,
 		transparent: false,
 		titleBarStyle: "hidden",
@@ -313,7 +132,6 @@ function createWindow() {
 
 	win.once("ready-to-show", () => {
 		win?.show();
-		DataManager.initConnection(win);
 	});
 
 	mpvController = new MPVController(win!);
@@ -330,8 +148,8 @@ function createControlWindow(
 		parent: win!,
 		width: win?.getBounds().width,
 		height: win?.getBounds().height,
-		minWidth: 720,
-		minHeight: 400,
+		minWidth: 820,
+		minHeight: 500,
 		alwaysOnTop: false,
 		icon: "./src/assets/icon.ico",
 		transparent: true,
@@ -472,22 +290,6 @@ ipcMain.handle("dialog:openFolder", async () => {
 		properties: ["openDirectory"],
 	});
 	return result.filePaths;
-});
-//#endregion
-
-//#region LIBRARY DATA COMMUNICATION
-ipcMain.handle("get-library-data", async () => {
-	return DataManager.loadData();
-});
-
-ipcMain.handle("save-library-data", async (_event, newData) => {
-	return DataManager.saveData(newData);
-});
-//#endregion
-
-//#region DELETE ELEMENTS
-ipcMain.on("delete-library", async (_event, library) => {
-	DataManager.deleteLibrary(library);
 });
 //#endregion
 

@@ -42,7 +42,7 @@ function AlbumCard({
 				src={element.coverSrc}
 				alt="Poster"
 				isRelative={false}
-				errorSrc="./src/resources/img/songDefault.png"
+				errorSrc="/img/songDefault.png"
 			/>
 			<span>{element.name}</span>
 			<span>{element.year}</span>

@@ -42,7 +42,7 @@ function BackgroundImages() {
 			} else if (currentSeason && currentSeason.coverSrc !== "") {
 				ReactUtils.getDominantColors(currentSeason.coverSrc);
 			} else {
-				ReactUtils.getDominantColors("./src/resources/img/songDefault.png");
+				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
 
 			setTimeout(() => {
@@ -116,7 +116,7 @@ function BackgroundImages() {
 					currentShowForBackground.seasons.length > 0 &&
 					currentShowForBackground.seasons[0].backgroundSrc !== "" ? (
 						<Image
-							src={`/resources/img/backgrounds/${currentShowForBackground.seasons[0].id}/fullBlur.jpg`}
+							src={`//img/backgrounds/${currentShowForBackground.seasons[0].id}/fullBlur.jpg`}
 							alt="Background"
 							isRelative={true}
 							errorSrc=""
@@ -138,7 +138,7 @@ function BackgroundImages() {
 			!useImageAsBackground ? (
 				<div className="noise-background">
 					<Image
-						src="resources/img/noise.png"
+						src="/img/noise.png"
 						alt="Noise image"
 						isRelative={true}
 						errorSrc=""

@@ -592,7 +592,7 @@ function SeasonWindow() {
 											}
 											id="seasonBackgroundImage"
 											alt="Video Thumbnail"
-											errorSrc="./src/resources/img/Default_video_thumbnail.jpg"
+											errorSrc="/img/Default_video_thumbnail.jpg"
 											isRelative={true}
 											onLoad={handleImageLoad}
 										/>

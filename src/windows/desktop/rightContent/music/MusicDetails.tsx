@@ -137,7 +137,7 @@ function MusicDetails() {
 								src={selectedAlbum.coverSrc}
 								alt="Poster"
 								isRelative={true}
-								errorSrc="./src/resources/img/songDefault.png"
+								errorSrc="/img/songDefault.png"
 							/>
 						</div>
 						<section className="season-info">

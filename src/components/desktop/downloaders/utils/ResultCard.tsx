@@ -39,7 +39,7 @@ function ResultCard({ result }: { result: MediaSearchResult }) {
 				src={result.thumbnail}
 				alt="Thumbnail"
 				isRelative={false}
-				errorSrc="./src/resources/img/fileNotFound.jpg"
+				errorSrc="/img/fileNotFound.jpg"
 			/>
 
 			<div className="result-info">

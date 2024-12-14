@@ -68,7 +68,7 @@ function MusicPlayer() {
 			if (imgSrc !== "") {
 				ReactUtils.getDominantColors(imgSrc);
 			} else {
-				ReactUtils.getDominantColors("./src/resources/img/songDefault.png");
+				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
 
 			setTimeout(() => {
@@ -188,12 +188,12 @@ function MusicPlayer() {
 							src={
 								songsList && currentSong !== -1
 									? songsList[currentSong].imgSrc
-									: "./src/resources/img/songDefault.png"
+									: "/img/songDefault.png"
 							}
 							alt="Song Cover"
 							onError={(e: any) => {
 								e.target.onerror = null;
-								e.target.src = "./src/resources/img/songDefault.png";
+								e.target.src = "/img/songDefault.png";
 							}}
 						/>
 						<div className="left-panel-info">
@@ -264,7 +264,7 @@ function MusicPlayer() {
 														onError={(e: any) => {
 															e.target.onerror = null;
 															e.target.src =
-																"./src/resources/img/songDefault.png";
+																"/img/songDefault.png";
 														}}
 													/>
 													<div className="song-btn-overlay">
@@ -325,13 +325,13 @@ function MusicPlayer() {
 									src={
 										songsList && currentSong !== -1
 											? songsList[currentSong].imgSrc
-											: "./src/resources/img/songDefault.png"
+											: "/img/songDefault.png"
 									}
 									alt="Song Cover"
 									onError={(e: any) => {
 										e.target.onerror = null;
 										e.target.src =
-											"./src/resources/img/songDefault.png";
+											"/img/songDefault.png";
 									}}
 								/>
 								<div className="music-controls-text">

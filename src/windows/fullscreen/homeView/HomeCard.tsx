@@ -42,7 +42,7 @@ function HomeCard({
 					src={value.show.coverSrc}
 					alt="Poster"
 					isRelative={true}
-					errorSrc="./src/resources/img/fileNotFound.jpg"
+					errorSrc="/img/fileNotFound.jpg"
 				/>
 			) : value.show.seasons &&
 			  value.show.seasons.length > 0 &&
@@ -51,11 +51,11 @@ function HomeCard({
 					src={value.show.seasons[0].coverSrc}
 					alt="Poster"
 					isRelative={true}
-					errorSrc="./src/resources/img/fileNotFound.jpg"
+					errorSrc="/img/fileNotFound.jpg"
 				/>
 			) : (
 				<Image
-					src="resources/img/fileNotFound.jpg"
+					src="/img/fileNotFound.jpg"
 					alt="Poster"
 					isRelative={true}
 					errorSrc=""

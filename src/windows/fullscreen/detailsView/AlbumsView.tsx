@@ -37,7 +37,7 @@ function AlbumsView() {
 						src={currentShow.coverSrc}
 						alt="Poster"
 						isRelative={false}
-						errorSrc="./src/resources/img/songDefault.png"
+						errorSrc="/img/songDefault.png"
 					/>
 				</div>
 				<div className="collection-info">
