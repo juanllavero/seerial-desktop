@@ -52,7 +52,9 @@ import NoContent from "./rightContent/noContent/NoContent";
 function MainDesktop() {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
-	const { data, loading, error } = useFetchArray<LibraryData>("http://192.168.1.45:3000/libraries");
+	const { data, loading, error } = useFetchArray<LibraryData>(
+		"http://192.168.1.45:3000/libraries"
+	);
 
 	const isVideoLoaded = useSelector(
 		(state: RootState) => state.video.isLoaded
@@ -70,6 +72,15 @@ function MainDesktop() {
 		(state: RootState) => state.data.selectedSeason
 	);
 	const [gradientBackground, setGradientBackground] = useState<string>("");
+
+	const [isWindows, setIsWindows] = useState(false);
+
+	useEffect(() => {
+		const userAgent = navigator.userAgent;
+		if (userAgent.includes("Windows")) {
+			setIsWindows(true);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (data) {
@@ -212,11 +223,9 @@ function MainDesktop() {
 				}}
 			>
 				<MainBackgroundImage />
-				{
-					selectedSeason && selectedSeason.backgroundSrc !== "" && (
-						<div className="noise-background"></div>
-					)
-				}
+				{selectedSeason && selectedSeason.backgroundSrc !== "" && (
+					<div className="noise-background"></div>
+				)}
 
 				<MusicPlayer />
 
@@ -283,7 +292,7 @@ function MainDesktop() {
 
 				{/* Right Panel */}
 				<section className="right-panel">
-					<TopBar />
+					{isWindows && <TopBar />}
 					{loading ? (
 						<Loading />
 					) : error ? (
