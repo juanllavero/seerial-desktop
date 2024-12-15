@@ -9,7 +9,6 @@ import windowStateSlice from "./slices/windowStateSlice";
 import menuSectionsSlice from "./slices/menuSectionsSlice";
 import dataSlice from "./slices/dataSlice";
 import musicPlayerSlice from "./slices/musicPlayerSlice";
-import fullscreenSectionsSlice from "./slices/fullscreenSectionsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -23,7 +22,6 @@ export const store = configureStore({
     windowState: windowStateSlice,
     sectionState: menuSectionsSlice,
     musicPlayer: musicPlayerSlice,
-    fullscreenSection: fullscreenSectionsSlice,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
