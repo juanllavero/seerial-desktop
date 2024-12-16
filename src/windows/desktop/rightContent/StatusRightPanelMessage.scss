@@ -1,0 +1,23 @@
+.server-status-container {
+	position: absolute;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+
+	top: 50%;
+	left: 0;
+	right: 0;
+
+   gap: 1rem;
+	z-index: 999;
+
+   #title {
+      font-size: 2.5dvh;
+      color: white;
+   }
+
+   #subtitle {
+      font-size: 1.5dvh;
+   }
+}

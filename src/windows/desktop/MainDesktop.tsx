@@ -48,13 +48,27 @@ import MusicPlayer from "windows/desktop/rightContent/music/MusicPlayer";
 import useFetchArray from "hooks/useFetch";
 import Loading from "@components/utils/Loading";
 import NoContent from "./rightContent/noContent/NoContent";
+import { useDataContext } from "context/data.context";
+import TryingToConnectToServer from "./rightContent/StatusRightPanelMessage";
+import StatusRightPanelMessage from "./rightContent/StatusRightPanelMessage";
+import { error } from "console";
+import StatusRightPanelMessageAPI from "./rightContent/StatusRightPanelMessageAPI";
+import RightContent from "./rightContent/RightContent";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
-	const { data, loading, error } = useFetchArray<LibraryData>(
-		"http://192.168.1.45:3000/libraries"
-	);
+
+	const {
+		gettingServerStatus,
+		serverStatus,
+		gettingApiKeyStatus,
+		apiKeyStatus,
+		getServerStatus,
+		currentServer,
+		setServerList,
+		serverList,
+	} = useDataContext();
 
 	const isVideoLoaded = useSelector(
 		(state: RootState) => state.video.isLoaded
@@ -71,13 +85,8 @@ function MainDesktop() {
 	const selectedSeason = useSelector(
 		(state: RootState) => state.data.selectedSeason
 	);
-	const [gradientBackground, setGradientBackground] = useState<string>("");
 
-	useEffect(() => {
-		if (data) {
-			dispatch(setLibraries(data));
-		}
-	}, [data]);
+	const [gradientBackground, setGradientBackground] = useState<string>("");
 
 	useEffect(() => {
 		if (selectedSeason) {
@@ -108,6 +117,13 @@ function MainDesktop() {
 	}, [selectedSeason]);
 
 	useEffect(() => {
+		window.ipcRenderer.on(
+			"set-servers",
+			(_event, newServerList: Server[]) => {
+				setServerList(newServerList);
+			}
+		);
+
 		window.ipcRenderer.on(
 			"update-libraries",
 			(_event, newLibraries: LibraryData[]) => {
@@ -284,15 +300,24 @@ function MainDesktop() {
 				{/* Right Panel */}
 				<section className="right-panel">
 					<TopBar />
-					{loading ? (
-						<Loading />
-					) : error ? (
-						<NoContent />
+					{!serverStatus ? (
+						<StatusRightPanelMessage
+							title={`${currentServer?.name} no está disponible en este momento`}
+							subtitle="Verifique que tenga una conexión de red y que el servidor esté en
+				línea."
+							containsButton={true}
+							action={getServerStatus}
+							buttonText="Reintentar conexión"
+						/>
+					) : !apiKeyStatus ? (
+						<StatusRightPanelMessageAPI
+							title={`${currentServer?.name} no cuenta con una clave de API`}
+							subtitle="Añada una clave de API para TheMovieDB."
+							containsButton={true}
+							buttonText="Comprobar clave API"
+						/>
 					) : (
-						<>
-							<LibraryAndSlider />
-							<RightPanel />
-						</>
+						<RightContent />
 					)}
 				</section>
 			</section>

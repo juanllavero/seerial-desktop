@@ -30,6 +30,17 @@ let mpvController: MPVController | null = null;
 const configPath = app.isPackaged
 	? path.join(path.dirname(app.getPath("exe")), "resources/config/config.json")
 	: path.join(app.getAppPath(), "resources/config/config.json");
+const serversPath = app.isPackaged
+	? path.join(path.dirname(app.getPath("exe")), "resources", "servers.json")
+	: path.join(app.getAppPath(), "resources", "servers.json");
+let serversList: Server[] = [];
+
+if (fs.existsSync(serversPath)) {
+	const data = fs.readFileSync(serversPath, "utf-8");
+	serversList = JSON.parse(data);
+} else {
+	fs.writeFileSync(serversPath, JSON.stringify([], null, 2));
+}
 
 // Cargar o crear la configuración
 function loadOrCreateConfig(): Record<string, any> {
@@ -131,6 +142,11 @@ function createWindow() {
 
 	win.once("ready-to-show", () => {
 		win?.show();
+
+		win?.webContents.send(
+			"set-servers",
+			serversList
+		);
 	});
 
 	mpvController = new MPVController(win!);

@@ -1,0 +1,51 @@
+@use "../../windows/utils/variables" as v;
+
+.main-btn {
+	margin-right: 0.6em;
+	padding: 1em 1.3em;
+	border: none;
+	border-radius: 3px;
+	transition: background-color 0.3s ease;
+	font-size: small;
+	font-weight: bold;
+	color: v.$color-text-primary;
+	background-color: v.$app-color-darker;
+	cursor: pointer;
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover {
+		background-color: v.$app-color;
+		color: v.$color-dark;
+	}
+}
+
+.main-btn.loading {
+	pointer-events: none;
+	opacity: 0.8;
+	background-color: v.$app-color-darker;
+	color: transparent;
+}
+
+.main-btn.loading::after {
+	content: "";
+	border: 2px solid rgba(255, 255, 255, 0);
+	border-top: 2px solid #eeeeee; /* Parte blanca más larga */
+	border-right: 2px solid #eeeeee;
+	border-radius: 50%;
+	width: 1rem;
+	height: 1rem;
+	animation: spin 1s linear infinite;
+	position: absolute;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
