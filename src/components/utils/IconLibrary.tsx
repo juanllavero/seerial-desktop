@@ -1,5 +1,21 @@
 import React from "react";
 
+export const ServerIcon = () => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="20"
+		height="20"
+		viewBox="0 0 20 20"
+	>
+		<path
+			fill="currentColor"
+			fillRule="evenodd"
+			d="M2 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm14 1a1 1 0 1 1-2 0a1 1 0 0 1 2 0M2 13a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm14 1a1 1 0 1 1-2 0a1 1 0 0 1 2 0"
+			clipRule="evenodd"
+		/>
+	</svg>
+);
+
 export const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
 	<svg
 		id="libraries-button-svg"

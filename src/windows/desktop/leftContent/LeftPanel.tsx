@@ -6,23 +6,42 @@ import {
 import {
 	resetSelection,
 	selectLibrary,
+	toggleLibraryEditWindow,
 } from "@redux/slices/dataSlice";
 import LibrariesList from "./LibrariesList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSectionContext } from "context/section.context";
 import MoreSection from "./MoreSection";
 import SettingsPanel from "./SettingsPanel";
 import { LeftPanelSections, RightPanelSections } from "@data/enums/Sections";
 import { LibraryData } from "@interfaces/LibraryData";
 import { removeTransparentImage } from "@redux/slices/transparentImageLoadedSlice";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./LeftPanel.scss";
+import { toggleLibraryMenu } from "@redux/slices/contextMenuSlice";
+import { t } from "i18next";
+import { ContextMenu } from "primereact/contextmenu";
+import { RootState } from "@redux/store";
+import { confirmDialog } from "primereact/confirmdialog";
+import { ReactUtils } from "@data/utils/ReactUtils";
 
 function LeftPanel() {
 	const dispatch = useDispatch();
 	const { currentLeftSection, setCurrentLeftSection, setCurrentRightSection } =
 		useSectionContext();
 	const [menuContracted, setMenuContracted] = useState<boolean>(false);
+
+	const libraries = useSelector((state: RootState) => state.data.libraries);
+	const libraryMenuOpen = useSelector(
+		(state: RootState) => state.contextMenu.libraryMenu
+	);
+	const libraryForMenu = useSelector(
+		(state: RootState) => state.data.libraryForMenu
+	);
+
+	useEffect(() => {
+		if (libraries) ReactUtils.saveLibraries(libraries);
+	}, [libraries]);
 
 	const handleSelectLibrary = useCallback(
 		(library: LibraryData | null) => {
@@ -41,8 +60,100 @@ function LeftPanel() {
 		[dispatch]
 	);
 
+	const cm = useRef<ContextMenu | null>(null);
+	const cm2 = useRef<ContextMenu | null>(null);
+	const cm3 = useRef<ContextMenu | null>(null);
+
+	const pinnedLibraryMenuItems = [
+		{
+			label: t("editButton"),
+			command: () => {
+				dispatch(toggleLibraryEditWindow());
+			},
+		},
+		{
+			label: t("searchFiles"),
+			command: () => {
+				dispatch(toggleLibraryMenu());
+			},
+		},
+		{
+			label: t("updateMetadata"),
+			command: () => {
+				dispatch(toggleLibraryMenu());
+			},
+		},
+		{
+			label: t("removeButton"),
+			command: () => {
+				showDeleteDialog();
+				dispatch(toggleLibraryMenu());
+			},
+		},
+	];
+
+	const libraryMenuItems = [
+		{
+			label: t("editButton"),
+			command: () => {
+				dispatch(toggleLibraryEditWindow());
+			},
+		},
+		{
+			label: t("searchFiles"),
+			command: () => {
+				dispatch(toggleLibraryMenu());
+			},
+		},
+		{
+			label: t("updateMetadata"),
+			command: () => {
+				dispatch(toggleLibraryMenu());
+			},
+		},
+		{
+			label: t("removeButton"),
+			command: () => {
+				showDeleteDialog();
+				dispatch(toggleLibraryMenu());
+			},
+		},
+	];
+
+	const serverMenuItems = [
+		{
+			label: t("settings"),
+			command: () => {
+				dispatch(toggleLibraryEditWindow());
+			},
+		},
+	];
+
+	const showDeleteDialog = () => {
+		confirmDialog({
+			message: t("removeLibraryMessage"),
+			header: `${t("removeLibrary")}: ${libraryForMenu?.name}`,
+			icon: "pi pi-info-circle",
+			defaultFocus: "reject",
+			acceptClassName: "p-button-danger",
+			accept,
+		});
+	};
+
+	const accept = () => {
+		if (libraryForMenu) {
+			window.electronAPI.deleteLibrary(libraryForMenu);
+		}
+	};
+
 	return (
-		<section className={`left-panel ${menuContracted && currentLeftSection !== LeftPanelSections.Settings && 'contracted'}`}>
+		<section
+			className={`left-panel ${
+				menuContracted &&
+				currentLeftSection !== LeftPanelSections.Settings &&
+				"contracted"
+			}`}
+		>
 			<div className="top-controls">
 				{/* <button
 					className="svg-add-library-btn select"
@@ -85,13 +196,38 @@ function LeftPanel() {
 					</button>
 				)}
 			</div>
+
+			{/* Left Panel Content */}
 			{currentLeftSection === LeftPanelSections.Settings ? (
 				<SettingsPanel />
 			) : currentLeftSection === LeftPanelSections.More ? (
-				<MoreSection />
+				<MoreSection cm={cm2} cmServer={cm3} handleSelectLibrary={handleSelectLibrary} />
 			) : (
-				<LibrariesList />
+				<LibrariesList cm={cm} handleSelectLibrary={handleSelectLibrary} />
 			)}
+
+			{/* Context Menus */}
+			<ContextMenu
+				model={pinnedLibraryMenuItems}
+				ref={cm}
+				className={`dropdown-menu ${
+					libraryMenuOpen ? " dropdown-menu-open" : ""
+				}`}
+			/>
+			<ContextMenu
+				model={libraryMenuItems}
+				ref={cm2}
+				className={`dropdown-menu ${
+					libraryMenuOpen ? " dropdown-menu-open" : ""
+				}`}
+			/>
+			<ContextMenu
+				model={serverMenuItems}
+				ref={cm3}
+				className={`dropdown-menu ${
+					libraryMenuOpen ? " dropdown-menu-open" : ""
+				}`}
+			/>
 		</section>
 	);
 }

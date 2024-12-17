@@ -8,6 +8,8 @@ function LeftSectionChangeButton() {
 
 	return (
 		<button
+         className="section-change-btn"
+         title={currentLeftSection !== LeftPanelSections.Pinned ? "Volver" : "Más"}
 			onClick={() => {
 				if (currentLeftSection === LeftPanelSections.Pinned) {
 					setCurrentLeftSection(LeftPanelSections.More);

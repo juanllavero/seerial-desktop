@@ -1,24 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-	selectLibrary,
-	toggleLibraryEditWindow,
-	resetSelection,
-	setLibraries,
-} from "../../../redux/slices/dataSlice";
-import { removeTransparentImage } from "../../../redux/slices/transparentImageLoadedSlice";
+import { setLibraries } from "../../../redux/slices/dataSlice";
 import { RootState } from "../../../redux/store";
-import {
-	toggleLibraryMenu,
-} from "redux/slices/contextMenuSlice";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ContextMenu } from "primereact/contextmenu";
-import { useTranslation } from "react-i18next";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import { LibraryData } from "@interfaces/LibraryData";
-import { RightPanelSections } from "@data/enums/Sections";
-import { useSectionContext } from "context/section.context";
 import "./LibrariesList.scss";
-import { ReactUtils } from "@data/utils/ReactUtils";
 import LibraryButton from "./utils/LibraryButton";
 import HomeButton from "./utils/HomeButton";
 import LeftSectionChangeButton from "./utils/LeftSectionChangeButton";
@@ -29,52 +16,19 @@ import LeftSectionChangeButton from "./utils/LeftSectionChangeButton";
  *
  * @returns A JSX element that displays the list of libraries.
  */
-function LibrariesList() {
-	const { t } = useTranslation();
+function LibrariesList({
+	cm,
+	handleSelectLibrary,
+}: {
+	cm: React.MutableRefObject<ContextMenu | null>;
+	handleSelectLibrary: (library: LibraryData | null) => void;
+}) {
 	const dispatch = useDispatch();
-	const { setCurrentRightSection } = useSectionContext();
 	const libraries = useSelector((state: RootState) => state.data.libraries);
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.selectedLibrary
 	);
 	const previousLibraryId = useRef<string | null>(null);
-
-	const libraryMenuOpen = useSelector(
-		(state: RootState) => state.contextMenu.libraryMenu
-	);
-	const libraryForMenu = useSelector(
-		(state: RootState) => state.data.libraryForMenu
-	);
-
-	const cm = useRef<ContextMenu | null>(null);
-
-	const menuItems = [
-		{
-			label: t("editButton"),
-			command: () => {
-				dispatch(toggleLibraryEditWindow());
-			},
-		},
-		{
-			label: t("searchFiles"),
-			command: () => {
-				dispatch(toggleLibraryMenu());
-			},
-		},
-		{
-			label: t("updateMetadata"),
-			command: () => {
-				dispatch(toggleLibraryMenu());
-			},
-		},
-		{
-			label: t("removeButton"),
-			command: () => {
-				showDeleteDialog();
-				dispatch(toggleLibraryMenu());
-			},
-		},
-	];
 
 	// This useEffect is needed to update the right panel when the selected library changes
 	useEffect(() => {
@@ -83,44 +37,6 @@ function LibrariesList() {
 			previousLibraryId.current = selectedLibrary.id;
 		}
 	}, [selectedLibrary]);
-
-	useEffect(() => {
-		if (libraries) ReactUtils.saveLibraries(libraries);
-	}, [libraries]);
-
-	const showDeleteDialog = () => {
-		confirmDialog({
-			message: t("removeLibraryMessage"),
-			header: `${t("removeLibrary")}: ${libraryForMenu?.name}`,
-			icon: "pi pi-info-circle",
-			defaultFocus: "reject",
-			acceptClassName: "p-button-danger",
-			accept,
-		});
-	};
-
-	const accept = () => {
-		if (libraryForMenu) {
-			window.electronAPI.deleteLibrary(libraryForMenu);
-		}
-	};
-
-	const handleSelectLibrary = useCallback(
-		(library: LibraryData | null) => {
-			dispatch(selectLibrary(library));
-			dispatch(resetSelection());
-			dispatch(removeTransparentImage());
-
-			if (library === null) {
-				setCurrentRightSection(RightPanelSections.Home);
-			} else if (library.type === "Shows" || library.type === "Movies") {
-				setCurrentRightSection(RightPanelSections.Collections);
-			} else {
-				setCurrentRightSection(RightPanelSections.MusicAlbums);
-			}
-		},
-		[dispatch]
-	);
 
 	//#region DRAG AND DROP
 	const draggingIndexRef = useRef<number | null>(null); // Index of the dragged item
@@ -176,15 +92,8 @@ function LibrariesList() {
 								cm={cm}
 							/>
 						)
-					)
+					);
 				})}
-				<ContextMenu
-					model={menuItems}
-					ref={cm}
-					className={`dropdown-menu ${
-						libraryMenuOpen ? " dropdown-menu-open" : ""
-					}`}
-				/>
 				<LeftSectionChangeButton />
 			</div>
 		</>
