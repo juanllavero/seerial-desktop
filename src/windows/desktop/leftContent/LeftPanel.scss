@@ -1,0 +1,78 @@
+@use "../../utils/variables" as v;
+
+/* LEFT PANEL */
+.left-panel {
+   max-width: 15rem;
+	width: 20dvw;
+	display: flex;
+	flex-direction: column;
+	padding: 10px 15px 10px 20px;
+	overflow-y: hidden;
+   overflow-x: hidden;
+	margin: 0 8px 8px 0;
+	height: 100%;
+	z-index: 10;
+
+   transition: all .15s ease;
+
+   &.contracted {
+		width: 6em;
+		transition: width 0.3s ease;
+   }
+}
+
+/* LEFT PANEL CONTROLS */
+.top-controls {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.top-controls button {
+	margin-right: 5px;
+}
+
+.svg-button-desktop-controls {
+	background-color: transparent;
+	border-color: transparent;
+	border-radius: 5px;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.svg-button-desktop-controls:hover {
+	background-color: rgba(0, 0, 0, 0.739);
+}
+
+.svg-button-desktop-controls svg {
+	width: 26px;
+	height: 26px;
+}
+
+.svg-add-library-btn {
+	background-color: transparent;
+	border-color: transparent;
+	border-radius: 5px;
+	padding: 10px 15px;
+	color: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-content: center;
+	cursor: pointer;
+}
+
+.svg-add-library-btn:hover {
+	background-color: rgba(0, 0, 0, 0.739);
+}
+
+.svg-add-library-btn svg {
+	width: 16px;
+	height: 16px;
+}
+
+.svg-add-library-btn span {
+	color: v.$color-text-primary;
+	margin-left: 10px;
+}

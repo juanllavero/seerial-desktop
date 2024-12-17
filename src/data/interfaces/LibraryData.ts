@@ -15,4 +15,5 @@ export interface LibraryData {
     seasonFolders: any;
     serverName: string;
     serverIp: string;
+    pinned: boolean;
   }

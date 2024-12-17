@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
 	selectLibrary,
-	setLibraryForMenu,
 	toggleLibraryEditWindow,
 	resetSelection,
 	setLibraries,
@@ -9,25 +8,20 @@ import {
 import { removeTransparentImage } from "../../../redux/slices/transparentImageLoadedSlice";
 import { RootState } from "../../../redux/store";
 import {
-	closeAllMenus,
 	toggleLibraryMenu,
 } from "redux/slices/contextMenuSlice";
 import { useCallback, useEffect, useRef } from "react";
 import { ContextMenu } from "primereact/contextmenu";
 import { useTranslation } from "react-i18next";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
-import {
-	HomeIcon,
-	MoviesIcon,
-	MusicIcon,
-	ShowsIcon,
-	VerticalDotsIcon,
-} from "@components/utils/IconLibrary";
 import { LibraryData } from "@interfaces/LibraryData";
 import { RightPanelSections } from "@data/enums/Sections";
 import { useSectionContext } from "context/section.context";
 import "./LibrariesList.scss";
 import { ReactUtils } from "@data/utils/ReactUtils";
+import LibraryButton from "./utils/LibraryButton";
+import HomeButton from "./utils/HomeButton";
+import LeftSectionChangeButton from "./utils/LeftSectionChangeButton";
 
 /**
  * A component that displays a list of libraries and allows the user to select a library,
@@ -128,6 +122,7 @@ function LibrariesList() {
 		[dispatch]
 	);
 
+	//#region DRAG AND DROP
 	const draggingIndexRef = useRef<number | null>(null); // Index of the dragged item
 
 	const handleDragStart = (index: number) => {
@@ -160,74 +155,29 @@ function LibrariesList() {
 		// Update Redux
 		dispatch(setLibraries(updatedLibraries));
 	};
+	//#endregion
 
 	return (
 		<>
 			<ConfirmDialog />
-			<div className="libraries-list scroll">
-				<button
-					className={`libraries-button ${
-						selectedLibrary === null ? "selected" : ""
-					}`}
-					title={t("home")}
-				>
-					<HomeIcon onClick={() => handleSelectLibrary(null)} />
-					<span
-						className="library-name"
-						onClick={() => handleSelectLibrary(null)}
-					>
-						{t("home")}
-					</span>
-				</button>
-				{libraries.map((library, index) => (
-					<button
-						key={library.id}
-						className={`libraries-button ${
-							library === selectedLibrary ? "selected" : ""
-						}`}
-						title={library.name}
-						draggable
-						onDragStart={() => handleDragStart(index)}
-						onDragEnd={() => handleDragEnd()}
-						onDragOver={(e) => handleDragOver(index, e)}
-					>
-						{library.type === "Shows" ? (
-							<ShowsIcon onClick={() => handleSelectLibrary(library)} />
-						) : library.type === "Movies" ? (
-							<MoviesIcon onClick={() => handleSelectLibrary(library)} />
-						) : (
-							<MusicIcon onClick={() => handleSelectLibrary(library)} />
-						)}
-						<span
-							className="library-name"
-							onClick={() => handleSelectLibrary(library)}
-						>
-							{library.name}
-						</span>
-
-						<div>
-							<a
-								id={library.id + "btn"}
-								className={`svg-button-desktop-transparent select ${
-									libraryMenuOpen && library == libraryForMenu
-										? " active-btn"
-										: " inactive-btn"
-								}`}
-								onClick={(e) => {
-									dispatch(closeAllMenus());
-
-									if (!libraryMenuOpen || library != libraryForMenu) {
-										dispatch(toggleLibraryMenu());
-										dispatch(setLibraryForMenu(library));
-										cm.current?.show(e);
-									}
-								}}
-							>
-								<VerticalDotsIcon />
-							</a>
-						</div>
-					</button>
-				))}
+			<div className="left-container scroll">
+				<HomeButton handleSelectLibrary={handleSelectLibrary} />
+				{libraries.map((library: LibraryData, index: number) => {
+					return (
+						!library.pinned && (
+							<LibraryButton
+								library={library}
+								index={index}
+								handleDragStart={handleDragStart}
+								handleDragEnd={handleDragEnd}
+								handleDragOver={handleDragOver}
+								dragable={true}
+								handleSelectLibrary={handleSelectLibrary}
+								cm={cm}
+							/>
+						)
+					)
+				})}
 				<ContextMenu
 					model={menuItems}
 					ref={cm}
@@ -235,6 +185,7 @@ function LibrariesList() {
 						libraryMenuOpen ? " dropdown-menu-open" : ""
 					}`}
 				/>
+				<LeftSectionChangeButton />
 			</div>
 		</>
 	);

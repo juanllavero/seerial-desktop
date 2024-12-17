@@ -1,6 +1,6 @@
 @use "../../utils/variables" as v;
 
-.libraries-list {
+.left-container {
 	margin-top: 10px;
 	margin-bottom: 30px;
 	background-color: #0000005b;
@@ -88,7 +88,7 @@
 }
 
 @media (max-width: 720px) {
-   .libraries-list {
+   .left-container {
       .libraries-button {
          gap: .5em;
       }

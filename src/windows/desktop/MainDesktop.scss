@@ -67,74 +67,6 @@ html, body {
   opacity: 1;
 }
 
-/* LEFT PANEL */
-.left-panel {
-  min-width: 16em;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 15px 10px 20px;
-  overflow-y: hidden;
-  margin: 0 8px 8px 0;
-  height: 100%;
-  z-index: 10;
-}
-
-/* LEFT PANEL CONTROLS */
-.top-controls {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.top-controls button {
-  margin-right: 5px;
-}
-
-.svg-button-desktop-controls{
-  background-color: transparent;
-  border-color: transparent;
-  border-radius: 5px;
-  padding: 5px;
-  cursor: pointer;
-}
-
-.svg-button-desktop-controls:hover{
-  background-color: rgba(0, 0, 0, 0.739);
-}
-
-.svg-button-desktop-controls svg{
-  width: 26px;
-  height: 26px;
-}
-
-.svg-add-library-btn {
-  background-color: transparent;
-  border-color: transparent;
-  border-radius: 5px;
-  padding: 10px 15px;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  cursor: pointer;
-}
-
-.svg-add-library-btn:hover{
-  background-color:rgba(0, 0, 0, 0.739);
-}
-
-.svg-add-library-btn svg{
-  width: 16px;
-  height: 16px;
-}
-
-.svg-add-library-btn span{
-  color: $color-text-primary;
-  margin-left: 10px;
-}
-
 /* AUXILIAR CLASSES */
 .center-align {
   position: absolute;
@@ -1005,18 +937,4 @@ html, body {
 .select-input {
   width: fit-content;
   padding: 0.5em 0.2em;            
-}
-
-@media (max-width: 720px) {
-  .svg-add-library-btn {
-    padding: .7em;
-    span{
-      display: none;
-    }
-  }
-
-  .left-panel {
-    min-width: 7em;
-    width: 6em;
-  }
 }
