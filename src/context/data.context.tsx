@@ -35,7 +35,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [currentServer]);
 
 	useEffect(() => {
-		if (serverList.length > 0) {
+		if (serverList && serverList.length > 0) {
 			setCurrentServer(serverList[0]);
 		}
 	}, [serverList]);

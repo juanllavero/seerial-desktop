@@ -5,9 +5,9 @@ import {
 	toggleLibraryEditWindow,
 	resetSelection,
 	setLibraries,
-} from "../../redux/slices/dataSlice";
-import { removeTransparentImage } from "../../redux/slices/transparentImageLoadedSlice";
-import { RootState } from "../../redux/store";
+} from "../../../redux/slices/dataSlice";
+import { removeTransparentImage } from "../../../redux/slices/transparentImageLoadedSlice";
+import { RootState } from "../../../redux/store";
 import {
 	closeAllMenus,
 	toggleLibraryMenu,

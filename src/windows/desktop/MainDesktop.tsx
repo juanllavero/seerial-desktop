@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import RightPanel from "./rightContent/RightPanel";
 import MainBackgroundImage from "@components/desktop/mainBackgroundImage";
 import {
 	addEpisode,
@@ -9,73 +8,46 @@ import {
 	addSeries,
 	selectLibrary,
 	setLibraries,
-	setLibraryForMenu,
-	toggleLibraryEditWindow,
 	updateSeries,
 } from "redux/slices/dataSlice";
-import { useTranslation } from "react-i18next";
 import "./MainDesktop.scss";
 import "../utils/utils.scss";
 import "../../i18n";
 import { toggleMaximize } from "redux/slices/windowStateSlice";
 import { closeVideo } from "redux/slices/videoSlice";
-import {
-	closeAllMenus,
-	toggleMainMenu,
-	toggleSettingsMenu,
-} from "redux/slices/contextMenuSlice";
+import { closeAllMenus } from "redux/slices/contextMenuSlice";
 import { LibraryData } from "@interfaces/LibraryData";
 import { ReactUtils } from "data/utils/ReactUtils";
 import { setGradientLoaded } from "redux/slices/imageLoadedSlice";
 import { SeriesData } from "@interfaces/SeriesData";
 import { SeasonData } from "@interfaces/SeasonData";
 import { EpisodeData } from "@interfaces/EpisodeData";
-import {
-	AddIcon,
-	MenuIcon,
-	SettingsIcon,
-	ShowsIcon,
-} from "@components/utils/IconLibrary";
 import TopBar from "./rightContent/utils/TopBar";
-import LibrariesList from "./LibrariesList";
 import DesktopSettings from "@components/desktop/windows/desktopSettings";
 import EpisodeWindow from "@components/desktop/windows/episodeWindow";
 import LibraryWindow from "@components/desktop/windows/libraryWindow";
 import SeasonWindow from "@components/desktop/windows/seasonWindow";
 import SeriesWindow from "@components/desktop/windows/seriesWindow";
-import LibraryAndSlider from "./rightContent/utils/LibraryAndSlider";
 import MusicPlayer from "windows/desktop/rightContent/music/MusicPlayer";
-import useFetchArray from "hooks/useFetch";
-import Loading from "@components/utils/Loading";
-import NoContent from "./rightContent/noContent/NoContent";
 import { useDataContext } from "context/data.context";
-import TryingToConnectToServer from "./rightContent/StatusRightPanelMessage";
 import StatusRightPanelMessage from "./rightContent/StatusRightPanelMessage";
-import { error } from "console";
 import StatusRightPanelMessageAPI from "./rightContent/StatusRightPanelMessageAPI";
 import RightContent from "./rightContent/RightContent";
+import LeftPanel from "./leftContent/LeftPanel";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
-	const { t } = useTranslation();
 
 	const {
-		gettingServerStatus,
 		serverStatus,
-		gettingApiKeyStatus,
 		apiKeyStatus,
 		getServerStatus,
 		currentServer,
 		setServerList,
-		serverList,
 	} = useDataContext();
 
 	const isVideoLoaded = useSelector(
 		(state: RootState) => state.video.isLoaded
-	);
-
-	const mainMenuOpen = useSelector(
-		(state: RootState) => state.contextMenu.mainMenu
 	);
 
 	const gradientLoaded = useSelector(
@@ -120,6 +92,7 @@ function MainDesktop() {
 		window.ipcRenderer.on(
 			"set-servers",
 			(_event, newServerList: Server[]) => {
+				console.log(newServerList);
 				setServerList(newServerList);
 			}
 		);
@@ -237,65 +210,7 @@ function MainDesktop() {
 				<MusicPlayer />
 
 				{/* Left Panel */}
-				<section className="left-panel">
-					<div className="top-controls">
-						<div className="dropdown" style={{ marginBottom: "0.9em" }}>
-							<button
-								className="svg-button-desktop-controls select"
-								onClick={() => {
-									if (!mainMenuOpen) dispatch(closeAllMenus());
-									dispatch(toggleMainMenu());
-								}}
-							>
-								<MenuIcon />
-							</button>
-							<ul className={`menu ${mainMenuOpen ? " menu-open" : ""}`}>
-								<li
-									key="settings"
-									onClick={() => {
-										dispatch(toggleSettingsMenu());
-									}}
-								>
-									<SettingsIcon />
-									<span>{t("settings")}</span>
-								</li>
-								<li
-									key="changeFullscreen"
-									onClick={() => {
-										dispatch(toggleMainMenu());
-									}}
-								>
-									<ShowsIcon width={18} height={18} />
-									<span>{t("switchToFullscreen")}</span>
-									<a>F11</a>
-								</li>
-								<li
-									key="ExitApp"
-									onClick={() => {
-										dispatch(toggleMainMenu());
-									}}
-								>
-									<img
-										src="./src/assets/svg/exitApp.svg"
-										style={{ width: "18px", height: "18px" }}
-									/>
-									<span>{t("exitFullscreen")}</span>
-								</li>
-							</ul>
-						</div>
-						<button
-							className="svg-add-library-btn select"
-							onClick={() => {
-								dispatch(setLibraryForMenu(undefined));
-								dispatch(toggleLibraryEditWindow());
-							}}
-						>
-							<AddIcon />
-							<span>{t("libraryWindowTitle")}</span>
-						</button>
-					</div>
-					<LibrariesList />
-				</section>
+				<LeftPanel />
 
 				{/* Right Panel */}
 				<section className="right-panel">

@@ -19,6 +19,12 @@ export enum RightPanelSections {
     NoContent
 };
 
+export enum LeftPanelSections {
+    Pinned = 1,
+    More,
+    Settings
+};
+
 export enum FullscreenSections {
     Home = 1,
     Collections,

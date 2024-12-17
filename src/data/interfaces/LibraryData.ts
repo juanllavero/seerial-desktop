@@ -13,4 +13,6 @@ export interface LibraryData {
     analyzedFiles: any;
     analyzedFolders: any;
     seasonFolders: any;
+    serverName: string;
+    serverIp: string;
   }

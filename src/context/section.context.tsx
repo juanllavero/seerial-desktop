@@ -1,5 +1,6 @@
 import {
 	FullscreenSections,
+	LeftPanelSections,
 	RightPanelSections,
 	WindowSections,
 } from "@data/enums/Sections";
@@ -17,6 +18,10 @@ export interface SectionContextProps {
 	currentFullscreenSection: FullscreenSections;
 	setCurrentFullscreenSection: React.Dispatch<
 		React.SetStateAction<FullscreenSections>
+	>;
+	currentLeftSection: LeftPanelSections;
+	setCurrentLeftSection: React.Dispatch<
+		React.SetStateAction<LeftPanelSections>
 	>;
 }
 
@@ -48,6 +53,9 @@ export const SectionProvider = ({
 	const [currentFullscreenSection, setCurrentFullscreenSection] = useState(
 		FullscreenSections.Home
 	);
+	const [currentLeftSection, setCurrentLeftSection] = useState(
+		LeftPanelSections.Pinned
+	);
 
 	return (
 		<SectionContext.Provider
@@ -58,6 +66,8 @@ export const SectionProvider = ({
 				setCurrentWindowSection,
 				currentFullscreenSection,
 				setCurrentFullscreenSection,
+				currentLeftSection,
+				setCurrentLeftSection,
 			}}
 		>
 			{children}

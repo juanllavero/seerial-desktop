@@ -22,22 +22,6 @@ interface LibraryState {
 	episodeWindowOpen: boolean;
 }
 
-const markEpisodesAsWatched = (episodes: EpisodeData[], endIndex: number) => {
-	for (let i = 0; i <= endIndex; i++) {
-		episodes[i].watched = true;
-	}
-};
-
-const markEpisodesAsUnwatched = (
-	episodes: EpisodeData[],
-	startIndex: number
-) => {
-	for (let i = startIndex; i < episodes.length; i++) {
-		episodes[i].watched = false;
-		episodes[i].timeWatched = 0;
-	}
-};
-
 const initialState: LibraryState = {
 	libraries: [],
 	selectedLibrary: null,
