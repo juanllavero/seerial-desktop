@@ -30,6 +30,31 @@
 	}
 }
 
+/* INPUT */ 
+input, textarea {
+	padding: 1em 1.3em 1em 1.3em;
+	background-color: v.$color-lighter;
+	border: none;
+	outline: none;
+	border-radius: 3px;
+
+	font-size: small;
+	font-family: sans-serif;
+
+	color: v.$color-text-primary;
+
+	transition: background-color .15s ease;
+ }
+
+ input::placeholder {
+	color: v.$color-text-default;
+ }
+
+ input:focus {
+	background-color: v.$color-bright;
+	color: black;
+ }
+
 /* LOADING CIRCLE SPINNER */
 .dialog-downloading {
 	position: absolute;

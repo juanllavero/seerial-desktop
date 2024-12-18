@@ -1,0 +1,50 @@
+.folder-selector {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 10;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	text-align: left;
+
+	padding: 2rem;
+
+	margin: 0 auto;
+	max-width: 50rem;
+	width: 70dvw;
+
+	height: fit-content;
+
+	.sections {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+
+		overflow-y: auto;
+
+		width: 100%;
+		height: 40dvh;
+
+		.drives-list,
+		.folder-list {
+			display: flex;
+			flex-flow: column nowrap;
+
+			max-width: 25rem;
+
+			ul {
+				list-style-type: none;
+
+				li {
+					overflow: hidden;
+					display: -webkit-box;
+					line-clamp: 3;
+					-webkit-line-clamp: 3;
+					-webkit-box-orient: vertical;
+				}
+			}
+		}
+	}
+}

@@ -1,4 +1,4 @@
-import { ServerIcon, VerticalDotsIcon } from "@components/utils/IconLibrary";
+import { AddIcon, ServerIcon, VerticalDotsIcon } from "@components/utils/IconLibrary";
 import React from "react";
 import "./ServerButton.scss";
 import { ContextMenu } from "primereact/contextmenu";
@@ -9,6 +9,7 @@ import {
 } from "@redux/slices/contextMenuSlice";
 import { RootState } from "@redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import { toggleLibraryEditWindow } from "@redux/slices/dataSlice";
 
 function ServerButton({
 	server,
@@ -27,6 +28,9 @@ function ServerButton({
 		<button className="server-btn" title={server.name}>
 			<ServerIcon />
 			<span>{server.name}</span>
+			<button onClick={() => dispatch(toggleLibraryEditWindow())}>
+				<AddIcon />
+			</button>
 			<div>
 				<a
 					id={server.ip + "btn"}

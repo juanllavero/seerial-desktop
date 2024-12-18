@@ -1,5 +1,44 @@
 import React from "react";
 
+export const FolderIcon = () => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+	>
+		<path
+			fill="currentColor"
+			d="M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h4.981l2 2h7.789q.69 0 1.153.463T21 8.616v8.769q0 .69-.462 1.153T19.385 19z"
+		/>
+	</svg>
+);
+
+export const FileIcon = () => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+	>
+		<path
+			fill="currentColor"
+			d="M13 9V3.5L18.5 9M6 2c-1.11 0-2 .89-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"
+		/>
+	</svg>
+);
+
+export const BackFolderIcon = () => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+	>
+		<path fill="currentColor" d="M20 9v6h-8v4.84L4.16 12L12 4.16V9z" />
+	</svg>
+);
+
 export const ServerIcon = () => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"

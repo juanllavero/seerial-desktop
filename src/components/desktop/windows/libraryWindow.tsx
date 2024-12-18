@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Library } from "@objects/Library";
 import { MoviesIcon, MusicIcon, ShowsIcon } from "@components/utils/IconLibrary";
 import Loading from "@components/utils/Loading";
+import FolderSelector from "./FolderSelector";
 
 function LibraryWindow() {
 	const dispatch = useDispatch();
@@ -85,7 +86,7 @@ function LibraryWindow() {
 			console.log("Error folder");
 		} else {
 			if (addLibraryMode) {
-				const newLibrary = new Library(name, language, type, 0, folders);
+				const newLibrary = new Library(name, language, type, 0, folders, "Server", "127.0.0.1", false);	//FIX SERVER DATA
 				window.electronAPI.scanFiles(newLibrary.toLibraryData());
 			} else if (selectedLibrary) {
 				selectedLibrary.name = name;
@@ -120,6 +121,7 @@ function LibraryWindow() {
 			<section
 				className={`dialog ${libraryMenuOpen ? " dialog-active" : ""}`}
 			>
+				<FolderSelector />
 				<div
 					className="dialog-background"
 					onClick={() => dispatch(toggleLibraryEditWindow())}
