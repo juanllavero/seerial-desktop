@@ -66,7 +66,6 @@ function MoreSection({
 							)}
 						</div>
 					);
-					return null;
 				})}
             <AddServerButton />
 			</div>
