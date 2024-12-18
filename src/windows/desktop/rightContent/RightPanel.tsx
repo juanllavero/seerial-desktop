@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { RightPanelSections } from "@data/enums/Sections";
+import { LeftPanelSections, RightPanelSections } from "@data/enums/Sections";
 import { useSectionContext } from "context/section.context";
 import "./RightPanel.scss";
 import NoContent from "./noContent/NoContent";
@@ -10,6 +10,7 @@ import DetailsSection from "./details/DetailsSection";
 import HomeSection from "./home/HomeSection";
 import MusicSection from "./music/MusicSection";
 import MusicDetails from "./music/MusicDetails";
+import SettingsRightPanel from "./SettingsRightPanel";
 
 /**
  * The RightPanel component is responsible for rendering the correct content
@@ -19,7 +20,7 @@ import MusicDetails from "./music/MusicDetails";
  * @returns The correct content based on the selected library and series.
  */
 function RightPanel() {
-	const { currentRightSection } = useSectionContext();
+	const { currentRightSection, currentLeftSection } = useSectionContext();
 
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.selectedLibrary
@@ -52,7 +53,9 @@ function RightPanel() {
 
 	return (
 		<>
-			{currentRightSection === RightPanelSections.Home ? (
+			{currentLeftSection === LeftPanelSections.Settings ? (
+				<SettingsRightPanel />
+			) : currentRightSection === RightPanelSections.Home ? (
 				<HomeSection />
 			) : currentRightSection === RightPanelSections.Collections ? (
 				<CollectionsList />

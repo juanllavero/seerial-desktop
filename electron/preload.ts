@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		ipcRenderer.invoke("scan-files", library),
 	updateLibrary: (library: LibraryData) =>
 		ipcRenderer.send("update-library", library),
-	getLibraryData: () => ipcRenderer.invoke("get-library-data"),
+	getServersData: () => ipcRenderer.invoke("get-servers-data"),
 	saveLibraryData: (newData: any) =>
 		ipcRenderer.invoke("save-library-data", newData),
 	startMPV: (

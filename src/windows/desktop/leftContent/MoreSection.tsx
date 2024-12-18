@@ -48,7 +48,7 @@ function MoreSection({
 					return (
 						<div key={server.ip}>
 							{/* Renderiza el botón del servidor */}
-							<ServerButton server={server} />
+							<ServerButton server={server} cmServer={cmServer}/>
 
 							{/* Renderiza la lista de bibliotecas para este servidor */}
 							{serverLibraries.map(

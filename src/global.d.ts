@@ -9,6 +9,7 @@ export interface ElectronAPI {
   off(arg0: string, handleResize: () => Promise<void>): void;
   translate: (key) => String,
   setFullscreenControls: () => void,
+  getServersData: () => Promise<Server[]>;
   minimizeWindow: () => void;
   maximizeWindow: () => void;
   closeWindow: () => void;

@@ -61,6 +61,12 @@ function MainDesktop() {
 	const [gradientBackground, setGradientBackground] = useState<string>("");
 
 	useEffect(() => {
+		window.electronAPI.getServersData().then((serversData: Server[]) => {
+			setServerList(serversData);
+		}).catch((error) => console.log(error));
+	}, []);
+
+	useEffect(() => {
 		if (selectedSeason) {
 			if (selectedSeason.coverSrc !== "") {
 				ReactUtils.getDominantColors(selectedSeason.coverSrc);
@@ -89,14 +95,6 @@ function MainDesktop() {
 	}, [selectedSeason]);
 
 	useEffect(() => {
-		window.ipcRenderer.on(
-			"set-servers",
-			(_event, newServerList: Server[]) => {
-				console.log(newServerList);
-				setServerList(newServerList);
-			}
-		);
-
 		window.ipcRenderer.on(
 			"update-libraries",
 			(_event, newLibraries: LibraryData[]) => {

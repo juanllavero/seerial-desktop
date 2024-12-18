@@ -24,6 +24,10 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 let win: BrowserWindow | null;
 let controlsWindow: BrowserWindow | null;
 let mpvController: MPVController | null = null;
+
+ipcMain.handle("get-servers-data", async () => {
+	return serversList;
+});
 //#endregion
 
 //#region CONFIGURATION FILE
@@ -141,12 +145,9 @@ function createWindow() {
 	});
 
 	win.once("ready-to-show", () => {
-		win?.show();
-
-		win?.webContents.send(
-			"set-servers",
-			serversList
-		);
+		if (win) {
+			win.show();
+		}
 	});
 
 	mpvController = new MPVController(win!);

@@ -13,6 +13,7 @@
 
    cursor: pointer;
 
+	padding: 0.3em;
 	gap: 0.5rem;
 	width: 100%;
 
@@ -41,11 +42,19 @@
 		max-width: 100%;
 	}
 
-   &:hover {
+	&:hover {
       color: v.$color-text-primary;
 
       svg path {
          fill: v.$color-text-primary;
       }
    }
+
+	.inactive-btn {
+		display: none;
+	}
+
+	.active-btn {
+		display: block;
+	}
 }

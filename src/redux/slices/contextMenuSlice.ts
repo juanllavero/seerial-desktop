@@ -6,6 +6,7 @@ const initialState = {
     audioMenuOpen: false,
     subtitleMenuOpen: false,
     subtitleSizeMenu: false,
+    serverMenu: false,
     libraryMenu: false,
     libraryMenuSecondary: false,
     seriesMenu: false,
@@ -31,6 +32,7 @@ reducers: {
         state.seasonMenu = false;
         state.episodeMenu = false;
         state.mainMenu = false;
+        state.serverMenu = false;
     },
     toggleContextMenu: (state) => {
         state.isContextShown = !state.isContextShown;
@@ -71,9 +73,12 @@ reducers: {
     toggleSettingsMenu: (state) => {
         state.settingsMenu = !state.settingsMenu;
     },
+    toggleServerMenu: (state) => {
+        state.serverMenu = !state.serverMenu;
+    }
 },
 });
 
 export const { closeAllMenus, closeContextMenu, toggleContextMenu, toggleVideoMenu, toggleAudioMenu, toggleSubsMenu, toggleSubsSizeMenu, toggleLibraryMenu, 
-    toggleLibraryMenuSecondary, toggleSeriesMenu, toggleSeasonMenu, toggleEpisodeMenu, toggleMainMenu, toggleSettingsMenu } = contextMenuSlice.actions;
+    toggleLibraryMenuSecondary, toggleSeriesMenu, toggleSeasonMenu, toggleEpisodeMenu, toggleMainMenu, toggleSettingsMenu, toggleServerMenu } = contextMenuSlice.actions;
 export default contextMenuSlice.reducer;

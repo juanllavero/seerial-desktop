@@ -11,6 +11,8 @@ interface DataContextProps {
 	serverList: Server[];
 	setServerList: (serverList: Server[]) => void;
 	setApiKey: (apiKey: string) => void;
+	serverForMenu: Server | undefined;
+	setServerForMenu: (server: Server) => void;
 }
 
 export const DataContext = React.createContext<DataContextProps | undefined>(
@@ -21,6 +23,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 	const [currentServer, setCurrentServer] = React.useState<Server | undefined>(
 		undefined
 	);
+	const [serverForMenu, setServerForMenu] = React.useState<Server | undefined>();
 	const [serverStatus, setServerStatus] = React.useState<boolean>(false);
 	const [gettingServerStatus, setGettingServerStatus] =
 		React.useState<boolean>(false);
@@ -106,6 +109,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 				serverList,
 				setServerList,
 				setApiKey,
+				serverForMenu,
+				setServerForMenu,
 			}}
 		>
 			{children}
