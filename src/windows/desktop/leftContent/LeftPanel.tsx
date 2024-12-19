@@ -24,11 +24,13 @@ import { ContextMenu } from "primereact/contextmenu";
 import { RootState } from "@redux/store";
 import { confirmDialog } from "primereact/confirmdialog";
 import { ReactUtils } from "@data/utils/ReactUtils";
+import { useDataContext } from "context/data.context";
 
 function LeftPanel() {
 	const dispatch = useDispatch();
 	const { currentLeftSection, setCurrentLeftSection, setCurrentRightSection } =
 		useSectionContext();
+	const { serverForMenu } = useDataContext();
 	const [menuContracted, setMenuContracted] = useState<boolean>(false);
 
 	const libraries = useSelector((state: RootState) => state.data.libraries);
@@ -127,6 +129,12 @@ function LeftPanel() {
 				dispatch(toggleLibraryEditWindow());
 			},
 		},
+		{
+			label: t("removeButton"),
+			command: () => {
+				showDeleteDialogServer();
+			},
+		},
 	];
 
 	const showDeleteDialog = () => {
@@ -143,6 +151,24 @@ function LeftPanel() {
 	const accept = () => {
 		if (libraryForMenu) {
 			window.electronAPI.deleteLibrary(libraryForMenu);
+		}
+	};
+
+	const showDeleteDialogServer = () => {
+		confirmDialog({
+			message: t("removeServerMessage"),
+			header: `${t("removeLibrary")}: ${serverForMenu?.ip}`,
+			icon: "pi pi-info-circle",
+			defaultFocus: "reject",
+			acceptClassName: "p-button-danger",
+			accept: acceptServer,
+		});
+	};
+
+	const acceptServer = () => {
+		if (serverForMenu) {
+			console.log("delete server " + serverForMenu.ip);
+			//window.electronAPI.deleteLibrary(libraryForMenu);
 		}
 	};
 

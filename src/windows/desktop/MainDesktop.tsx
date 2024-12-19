@@ -34,6 +34,7 @@ import StatusRightPanelMessage from "./rightContent/StatusRightPanelMessage";
 import StatusRightPanelMessageAPI from "./rightContent/StatusRightPanelMessageAPI";
 import RightContent from "./rightContent/RightContent";
 import LeftPanel from "./leftContent/LeftPanel";
+import AddServer from "@components/desktop/windows/AddServer";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
@@ -183,6 +184,7 @@ function MainDesktop() {
 			<SeriesWindow />
 			<SeasonWindow />
 			<EpisodeWindow />
+			<AddServer />
 
 			<div
 				className={`gradient-background ${gradientLoaded ? "fade-in" : ""}`}

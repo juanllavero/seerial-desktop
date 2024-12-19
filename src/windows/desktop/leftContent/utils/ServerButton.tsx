@@ -1,4 +1,8 @@
-import { AddIcon, ServerIcon, VerticalDotsIcon } from "@components/utils/IconLibrary";
+import {
+	AddIcon,
+	ServerIcon,
+	VerticalDotsIcon,
+} from "@components/utils/IconLibrary";
 import React from "react";
 import "./ServerButton.scss";
 import { ContextMenu } from "primereact/contextmenu";
@@ -25,20 +29,21 @@ function ServerButton({
 	);
 
 	return (
-		<button className="server-btn" title={server.name}>
+		<button className="server-btn" title={server.name}
+			onClick={() => setServerForMenu(server)}>
 			<ServerIcon />
 			<span>{server.name}</span>
-			<button onClick={() => dispatch(toggleLibraryEditWindow())}>
-				<AddIcon />
-			</button>
-			<div>
+
+			<div className="server-btn-options">
+				<button
+					className={`svg-button-desktop-transparent select`}
+					onClick={() => dispatch(toggleLibraryEditWindow())}
+				>
+					<AddIcon />
+				</button>
 				<a
 					id={server.ip + "btn"}
-					className={`svg-button-desktop-transparent select ${
-						serverMenuOpen && server == serverForMenu
-							? " active-btn"
-							: " inactive-btn"
-					}`}
+					className={`svg-button-desktop-transparent select`}
 					onClick={(e) => {
 						dispatch(closeAllMenus());
 

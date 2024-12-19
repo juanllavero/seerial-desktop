@@ -13,6 +13,7 @@ interface DataContextProps {
 	setApiKey: (apiKey: string) => void;
 	serverForMenu: Server | undefined;
 	setServerForMenu: (server: Server) => void;
+	removeServer: (server: Server) => void;
 }
 
 export const DataContext = React.createContext<DataContextProps | undefined>(
@@ -96,6 +97,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 		setGettingApiKeyStatus(false);
 	};
 
+	const removeServer = (server: Server) => {
+		setServerList(serverList.filter((s) => s.ip !== server.ip));
+	};
+
 	return (
 		<DataContext.Provider
 			value={{
@@ -111,6 +116,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 				setApiKey,
 				serverForMenu,
 				setServerForMenu,
+				removeServer,
 			}}
 		>
 			{children}

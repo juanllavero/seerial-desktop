@@ -40,17 +40,17 @@ function MoreSection({
 			<div className="left-container scroll">
 				<LeftSectionChangeButton />
 				{serverList.map((server) => {
-					// Filtrar las bibliotecas que pertenecen al servidor actual
+					// Filter libraries that belong to the current server
 					const serverLibraries = libraries.filter(
 						(library) => library.serverIp === server.ip
 					);
 
 					return (
 						<div key={server.ip}>
-							{/* Renderiza el botón del servidor */}
+							{/* Render the server button */}
 							<ServerButton server={server} cmServer={cmServer}/>
 
-							{/* Renderiza la lista de bibliotecas para este servidor */}
+							{/* Renders the list of libraries for this server */}
 							{serverLibraries.map(
 								(library: LibraryData, index: number) =>
 									!library.pinned && (
