@@ -72,7 +72,7 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 
 	// Renderizar las unidades o carpetas
 	const renderFolderContent = () => {
-		if (loading) return <p>Cargando...</p>;
+		if (loading) return <p>Loading...</p>;
 
 		return (
 			<>
@@ -100,7 +100,7 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 									<FolderIcon /> {item.name}
 								</span>
 							) : (
-								<span key={index} style={{ color: "#777" }}>
+								<span key={index} className="disabled">
 									<FileIcon /> {item.name}
 								</span>
 							)
