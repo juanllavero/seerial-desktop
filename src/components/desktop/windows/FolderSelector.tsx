@@ -75,16 +75,16 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 		if (loading) return <p>Cargando...</p>;
 
 		return (
-			<ul>
+			<>
 				{/* Go Back button */}
 				{currentPath && (
-					<li
+					<span
 						onClick={() => handleFolderClick(".. [Back]")}
 						style={{ cursor: "pointer" }}
 					>
 						<BackFolderIcon />
 						.. [Back]
-					</li>
+					</span>
 				)}
 
 				{/* Folders */}
@@ -92,20 +92,20 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 					folderContent.map(
 						(item: { name: string; isFolder: boolean }, index) =>
 							item.isFolder ? (
-								<li
+								<span
 									key={index}
 									onClick={() => handleFolderClick(item.name)}
 									style={{ cursor: "pointer" }}
 								>
 									<FolderIcon /> {item.name}
-								</li>
+								</span>
 							) : (
-								<li key={index} style={{ color: "#777" }}>
+								<span key={index} style={{ color: "#777" }}>
 									<FileIcon /> {item.name}
-								</li>
+								</span>
 							)
 					)}
-			</ul>
+			</>
 		);
 	};
 
@@ -137,23 +137,21 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 					/>
 					<div className="sections">
 						<div className="drives-list">
-							<ul>
-								{drives.length > 0 &&
-									drives.map((drive, index) => (
-										<li
-											key={index}
-											onClick={() => fetchFolderContent(drive)}
-											style={{ cursor: "pointer" }}
-										>
-											{index === 0 ? (
-												<HomeFullDefaultIcon />
-											) : (
-												<FolderIcon />
-											)}{" "}
-											{index === 0 ? getUserFromPath(drive) : drive}
-										</li>
-									))}
-							</ul>
+							{drives.length > 0 &&
+								drives.map((drive, index) => (
+									<span
+										key={index}
+										onClick={() => fetchFolderContent(drive)}
+										style={{ cursor: "pointer" }}
+									>
+										{index === 0 ? (
+											<HomeFullDefaultIcon />
+										) : (
+											<FolderIcon />
+										)}{" "}
+										{index === 0 ? getUserFromPath(drive) : drive}
+									</span>
+								))}
 						</div>
 						<div className="folder-list">
 							{currentPath && renderFolderContent()}

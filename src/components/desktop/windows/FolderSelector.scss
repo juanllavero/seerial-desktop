@@ -2,7 +2,7 @@
 
 .sections {
 	display: grid;
-	grid-template-columns: 0.8fr 1.2fr;
+	grid-template-columns: 0.6fr 1.4fr;
 
 	width: 100%;
 
@@ -13,7 +13,6 @@
 
 		span {
 			color: v.$color-text-default !important;
-			width: fit-content;
 			background-color: transparent !important;
 			overflow: hidden;
 			display: -webkit-box;
@@ -21,8 +20,14 @@
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 
+			max-width: 30rem;
+
 			&:hover {
 				color: v.$color-text-primary !important;
+			}
+
+			svg {
+				width: 2rem;
 			}
 		}
 	}
