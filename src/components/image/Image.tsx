@@ -1,3 +1,4 @@
+import { useDataContext } from "context/data.context";
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -24,12 +25,17 @@ function Image({
 	className,
 	onLoad,
 }: ImageProps) {
+	const { currentServer } = useDataContext();
 	return (
 		<>
 			{isRelative ? (
 				<LazyLoadImage
 					id={id && id}
-					src={`http://192.168.1.45:3000/${src}`}
+					src={
+						src.startsWith("http")
+							? src
+							: `http://${currentServer?.ip}:3000/${src}`
+					}
 					alt={alt}
 					style={{
 						width: `${width}px`,
