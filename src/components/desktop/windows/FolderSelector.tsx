@@ -12,11 +12,9 @@ import { toggleFolderSelectionMenu } from "@redux/slices/contextMenuSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import useFetch from "hooks/useFetch";
-import DialogTop from "./utils/DialogTop";
 import DialogCenter from "./utils/DialogCenter";
 import DialogCenterContent from "./utils/DialogCenterContent";
 import DialogBottom from "./utils/DialogBottom";
-import DialogBox from "./utils/DialogBox";
 import DialogTemplate from "./utils/DialogTemplate";
 
 // Componente principal
