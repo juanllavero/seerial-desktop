@@ -6,9 +6,19 @@ import { RootState } from "redux/store";
 import { toggleLibraryEditWindow } from "redux/slices/dataSlice";
 import { useTranslation } from "react-i18next";
 import { Library } from "@objects/Library";
-import { MoviesIcon, MusicIcon, ShowsIcon } from "@components/utils/IconLibrary";
+import {
+	MoviesIcon,
+	MusicIcon,
+	ShowsIcon,
+} from "@components/utils/IconLibrary";
 import Loading from "@components/utils/Loading";
 import FolderSelector from "./FolderSelector";
+import { toggleFolderSelectionMenu } from "@redux/slices/contextMenuSlice";
+import DialogBottom from "./utils/DialogBottom";
+import DialogTemplate from "./utils/DialogTemplate";
+import DialogCenter from "./utils/DialogCenter";
+import DialogCenterLeftPanel from "./utils/DialogCenterLeftPanel";
+import DialogCenterContent from "./utils/DialogCenterContent";
 
 function LibraryWindow() {
 	const dispatch = useDispatch();
@@ -25,6 +35,9 @@ function LibraryWindow() {
 	);
 	const libraryMenuOpen = useSelector(
 		(state: RootState) => state.data.libraryEditWindow
+	);
+	const folderSelectionMenuOpen = useSelector(
+		(state: RootState) => state.contextMenu.folderSelectionMenu
 	);
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.libraryForMenu
@@ -55,16 +68,18 @@ function LibraryWindow() {
 		}
 	};
 
-	const handleSelectFolder = async () => {
-		const result = await window.electronAPI.openFolderDialog();
-		if (result.length > 0) {
-			const newFolders = result.filter(
-				(folder) => !folders.includes(folder)
-			);
-			if (newFolders.length > 0) {
-				setFolders((prevFolders) => [...prevFolders, ...newFolders]);
-			}
-		}
+	const handleSelectFolder = async (newFolder: string) => {
+		// const result = await window.electronAPI.openFolderDialog();
+		// if (result.length > 0) {
+		// 	const newFolders = result.filter(
+		// 		(folder) => !folders.includes(folder)
+		// 	);
+		// 	if (newFolders.length > 0) {
+		// 		setFolders((prevFolders) => [...prevFolders, ...newFolders]);
+		// 	}
+		// }
+
+		setFolders((prevFolders) => [...prevFolders, newFolder]);
 	};
 
 	const handleRemoveFolder = (folderToRemove: string) => {
@@ -86,7 +101,16 @@ function LibraryWindow() {
 			console.log("Error folder");
 		} else {
 			if (addLibraryMode) {
-				const newLibrary = new Library(name, language, type, 0, folders, "Server", "127.0.0.1", false);	//FIX SERVER DATA
+				const newLibrary = new Library(
+					name,
+					language,
+					type,
+					0,
+					folders,
+					"Server",
+					"127.0.0.1",
+					false
+				); //FIX SERVER DATA
 				window.electronAPI.scanFiles(newLibrary.toLibraryData());
 			} else if (selectedLibrary) {
 				selectedLibrary.name = name;
@@ -117,209 +141,179 @@ function LibraryWindow() {
 	}, [libraryMenuOpen]);
 
 	return (
-		<Suspense fallback={<Loading />}>
-			<section
-				className={`dialog ${libraryMenuOpen ? " dialog-active" : ""}`}
-			>
-				<FolderSelector />
-				<div
-					className="dialog-background"
-					onClick={() => dispatch(toggleLibraryEditWindow())}
-				></div>
-				<div className="dialog-box">
-					<section className="dialog-top">
-						{selectedLibrary ? (
-							<span>{t("libraryWindowTitleEdit")}</span>
-						) : (
-							<span>{t("libraryWindowTitle")}</span>
-						)}
-						<button
-							className="close-window-btn"
-							onClick={() => dispatch(toggleLibraryEditWindow())}
-						>
-							<img
-								src="./src/assets/svg/windowClose.svg"
-								style={{
-									width: "24px",
-									height: "24px",
-									filter: "drop-shadow(2px 1px 2px rgb(0 0 0 / 0.5))",
-								}}
-							/>
-						</button>
-					</section>
-					<section className="dialog-center">
-						<div className="dialog-center-left">
-							<button
-								className={`desktop-dialog-side-btn ${
-									menuSection === WindowSections.General
-										? " desktop-dialog-side-btn-active"
-										: ""
-								}`}
-								onClick={() =>
-									dispatch(changeMenuSection(WindowSections.General))
-								}
-							>
-								{t("generalButton")}
-							</button>
-							<button
-								className={`desktop-dialog-side-btn ${
-									menuSection === WindowSections.Folders
-										? " desktop-dialog-side-btn-active"
-										: ""
-								}`}
-								onClick={() =>
-									dispatch(changeMenuSection(WindowSections.Folders))
-								}
-							>
-								{t("folders")}
-							</button>
-						</div>
-						<div className="dialog-center-right scroll">
-							{menuSection == WindowSections.General ? (
-								<>
-									<span>{t("type")}</span>
-									<div className="dialog-library-type-box">
-										<button
-											className={`dialog-library-btn ${
-												selectedLibrary
-													? selectedLibrary.type === "Movies"
-														? " dialog-library-btn-active"
-														: "dialog-library-btn-disabled"
-													: type === "Movies"
-													? " dialog-library-btn-active"
-													: ""
-											}`}
-											onClick={() => {
-												setType("Movies");
-												setName(t("movies"));
-											}}
-										>
-											<MoviesIcon />
-											<span>{t("movies")}</span>
-										</button>
-										<button
-											className={`dialog-library-btn ${
-												selectedLibrary
-													? selectedLibrary.type === "Shows"
-														? " dialog-library-btn-active"
-														: "dialog-library-btn-disabled"
-													: type === "Shows"
-													? " dialog-library-btn-active"
-													: ""
-											}`}
-											onClick={() => {
-												setType("Shows");
-												setName(t("shows"));
-											}}
-										>
-											<ShowsIcon />
-											<span>{t("shows")}</span>
-										</button>
-										<button
-											className={`dialog-library-btn ${
-												selectedLibrary
-													? selectedLibrary.type === "Music"
-														? " dialog-library-btn-active"
-														: "dialog-library-btn-disabled"
-													: type === "Music"
-													? " dialog-library-btn-active"
-													: ""
-											}`}
-											onClick={() => {
-												setType("Music");
-												setName(t("music"));
-											}}
-										>
-											<MusicIcon />
-											<span>{t("music")}</span>
-										</button>{" "}
-									</div>
-									<section className="dialog-horizontal-box">
-										<div className="dialog-input-box">
-											<span>{t("name")}</span>
-											<input
-												type="text"
-												value={name}
-												onChange={(e) => setName(e.target.value)}
-											/>
-										</div>
-										<div className="dialog-input-box">
-											<span>{t("languageText")}</span>
-											<select
-												value={language}
-												onChange={handleLanguageChange}
-											>
-												{supportedLanguages.map((lng: string) => (
-													<option key={lng} value={lng}>
-														{getLanguageName(lng) || lng}
-													</option>
-												))}
-											</select>
-										</div>
-									</section>
-								</>
-							) : menuSection == WindowSections.Folders ? (
-								<>
-									<span>{t("addFolderText")}</span>
-									<ul className="folder-list">
-										{folders.map((folder, index) => (
-											<li key={index}>
-												{folder}
-												<button
-													className="svg-button-desktop-transparent"
-													onClick={() =>
-														handleRemoveFolder(folder)
-													}
-												>
-													<img
-														src="./src/assets/svg/windowClose.svg"
-														style={{
-															width: "20px",
-															height: "20px",
-															filter:
-																"drop-shadow(2px 1px 2px rgb(0 0 0 / 0.5))",
-														}}
-													/>
-												</button>
-											</li>
-										))}
-									</ul>
-									<button
-										className="desktop-dialog-btn add-folder-btn"
-										onClick={handleSelectFolder}
+		<DialogTemplate
+			menuOpen={libraryMenuOpen}
+			title={
+				selectedLibrary
+					? t("libraryWindowTitleEdit")
+					: t("libraryWindowTitle")
+			}
+			cancelAction={() => dispatch(toggleLibraryEditWindow())}
+		>
+			<FolderSelector onAccept={handleSelectFolder} />
+			<DialogCenter>
+				<DialogCenterLeftPanel>
+					<button
+						className={`desktop-dialog-side-btn ${
+							menuSection === WindowSections.General
+								? " desktop-dialog-side-btn-active"
+								: ""
+						}`}
+						onClick={() =>
+							dispatch(changeMenuSection(WindowSections.General))
+						}
+					>
+						{t("generalButton")}
+					</button>
+					<button
+						className={`desktop-dialog-side-btn ${
+							menuSection === WindowSections.Folders
+								? " desktop-dialog-side-btn-active"
+								: ""
+						}`}
+						onClick={() =>
+							dispatch(changeMenuSection(WindowSections.Folders))
+						}
+					>
+						{t("folders")}
+					</button>
+				</DialogCenterLeftPanel>
+				<DialogCenterContent>
+					{menuSection == WindowSections.General ? (
+						<>
+							<span>{t("type")}</span>
+							<div className="dialog-library-type-box">
+								<button
+									className={`dialog-library-btn ${
+										selectedLibrary
+											? selectedLibrary.type === "Movies"
+												? " dialog-library-btn-active"
+												: "dialog-library-btn-disabled"
+											: type === "Movies"
+											? " dialog-library-btn-active"
+											: ""
+									}`}
+									onClick={() => {
+										setType("Movies");
+										setName(t("movies"));
+									}}
+								>
+									<MoviesIcon />
+									<span>{t("movies")}</span>
+								</button>
+								<button
+									className={`dialog-library-btn ${
+										selectedLibrary
+											? selectedLibrary.type === "Shows"
+												? " dialog-library-btn-active"
+												: "dialog-library-btn-disabled"
+											: type === "Shows"
+											? " dialog-library-btn-active"
+											: ""
+									}`}
+									onClick={() => {
+										setType("Shows");
+										setName(t("shows"));
+									}}
+								>
+									<ShowsIcon />
+									<span>{t("shows")}</span>
+								</button>
+								<button
+									className={`dialog-library-btn ${
+										selectedLibrary
+											? selectedLibrary.type === "Music"
+												? " dialog-library-btn-active"
+												: "dialog-library-btn-disabled"
+											: type === "Music"
+											? " dialog-library-btn-active"
+											: ""
+									}`}
+									onClick={() => {
+										setType("Music");
+										setName(t("music"));
+									}}
+								>
+									<MusicIcon />
+									<span>{t("music")}</span>
+								</button>{" "}
+							</div>
+							<section className="dialog-horizontal-box">
+								<div className="dialog-input-box">
+									<span>{t("name")}</span>
+									<input
+										type="text"
+										value={name}
+										onChange={(e) => setName(e.target.value)}
+									/>
+								</div>
+								<div className="dialog-input-box">
+									<span>{t("languageText")}</span>
+									<select
+										value={language}
+										onChange={handleLanguageChange}
 									>
-										{t("addFolder")}
-									</button>
-								</>
-							) : (
-								<></>
-							)}
-						</div>
-					</section>
-					<section className="dialog-bottom">
-						<button
-							className="desktop-dialog-btn"
-							onClick={() => dispatch(toggleLibraryEditWindow())}
-						>
-							{t("cancelButton")}
-						</button>
-						<button
-							className="btn-app-color"
-							onClick={
-								menuSection === WindowSections.General
-									? () => dispatch(changeMenuSection(WindowSections.Folders))
-									: () => handleSave()
-							}
-						>
-							{menuSection === WindowSections.General
-								? `${t("next")}`
-								: `${t("saveButton")}`}
-						</button>
-					</section>
-				</div>
-			</section>
-		</Suspense>
+										{supportedLanguages.map((lng: string) => (
+											<option key={lng} value={lng}>
+												{getLanguageName(lng) || lng}
+											</option>
+										))}
+									</select>
+								</div>
+							</section>
+						</>
+					) : menuSection == WindowSections.Folders ? (
+						<>
+							<span>{t("addFolderText")}</span>
+							<ul className="folder-list">
+								{folders.map((folder, index) => (
+									<li key={index}>
+										{folder}
+										<button
+											className="svg-button-desktop-transparent"
+											onClick={() => handleRemoveFolder(folder)}
+										>
+											<img
+												src="./src/assets/svg/windowClose.svg"
+												style={{
+													width: "20px",
+													height: "20px",
+													filter:
+														"drop-shadow(2px 1px 2px rgb(0 0 0 / 0.5))",
+												}}
+											/>
+										</button>
+									</li>
+								))}
+							</ul>
+							<button
+								className="desktop-dialog-btn add-folder-btn"
+								onClick={() => dispatch(toggleFolderSelectionMenu())}
+							>
+								{t("addFolder")}
+							</button>
+						</>
+					) : (
+						<></>
+					)}
+				</DialogCenterContent>
+			</DialogCenter>
+			<DialogBottom cancelAction={() => dispatch(toggleLibraryEditWindow())}>
+				<button
+					className="btn-app-color"
+					onClick={
+						menuSection === WindowSections.General
+							? () => dispatch(changeMenuSection(WindowSections.Folders))
+							: () => handleSave()
+					}
+				>
+					{menuSection === WindowSections.General
+						? `${t("next")}`
+						: `${t("saveButton")}`}
+				</button>
+			</DialogBottom>
+		</DialogTemplate>
 	);
-};
+}
 
 export default LibraryWindow;

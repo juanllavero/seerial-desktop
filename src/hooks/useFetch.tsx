@@ -1,49 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from "react";
 
-interface FetchState<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-}
+// Custom hook to fetch data from an API
+const useFetch = () => {
+	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
 
-function useFetchArray<T>(url: string, options?: RequestInit) {
-  const [state, setState] = useState<FetchState<T[]>>({
-    data: null,
-    loading: false,
-    error: null,
-  });
+	const fetchData = useCallback(
+		async (
+			url: string,
+			onSuccess: (data: any) => void,
+			onError: (error: any) => void = () => {},
+			onFinally: () => void = () => {},
+			options: RequestInit = {}
+		) => {
+			setLoading(true);
+			setError(null);
 
-  useEffect(() => {
-    let isMounted = true; // Evita actualizaciones del estado si el componente se desmonta
+			try {
+				const response = await fetch(url, options);
 
-    const fetchData = async () => {
-      setState({ data: null, loading: true, error: null });
+				if (!response.ok) {
+					throw new Error(
+						`Error ${response.status}: ${response.statusText}`
+					);
+				}
 
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
+				const data = await response.json();
+				onSuccess(data);
+			} catch (err) {
+				onError(err);
+			} finally {
+				setLoading(false);
+				onFinally();
+			}
+		},
+		[]
+	);
 
-        const json: T[] = await response.json();
-        if (isMounted) {
-          setState({ data: json, loading: false, error: null });
-        }
-      } catch (error) {
-        if (isMounted) {
-          setState({ data: null, loading: false, error: (error as Error).message });
-        }
-      }
-    };
+	return { fetchData, loading, error };
+};
 
-    fetchData();
-
-    return () => {
-      isMounted = false; // Cleanup para evitar fugas de memoria
-    };
-  }, [url, options]);
-
-  return state;
-}
-
-export default useFetchArray;
+export default useFetch;

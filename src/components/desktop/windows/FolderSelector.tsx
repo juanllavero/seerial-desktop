@@ -6,65 +6,63 @@ import {
 	FileIcon,
 	FolderIcon,
 	HomeFullDefaultIcon,
-	HomeIcon,
 } from "@components/utils/IconLibrary";
 import { useTranslation } from "react-i18next";
+import { toggleFolderSelectionMenu } from "@redux/slices/contextMenuSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import useFetch from "hooks/useFetch";
+import DialogTop from "./utils/DialogTop";
+import DialogCenter from "./utils/DialogCenter";
+import DialogCenterContent from "./utils/DialogCenterContent";
+import DialogBottom from "./utils/DialogBottom";
+import DialogBox from "./utils/DialogBox";
+import DialogTemplate from "./utils/DialogTemplate";
 
 // Componente principal
-const FolderSelector = () => {
+const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
+	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const { fetchData, loading } = useFetch();
 	const [drives, setDrives] = useState<string[]>([]); // Lista de unidades
 	const [folderContent, setFolderContent] = useState<
 		{ name: string; isFolder: boolean }[]
 	>([]); // Contenido de la carpeta
 	const [currentPath, setCurrentPath] = useState<string>(""); // Ruta actual
-	const [loading, setLoading] = useState<boolean>(false); // Estado de carga
 	const { currentServer } = useDataContext();
+
+	const folderSelectMenuOpen = useSelector(
+		(state: RootState) => state.contextMenu.folderSelectionMenu
+	);
 
 	// Fetch para obtener las unidades de disco
 	useEffect(() => {
-		const fetchDrives = async () => {
-			setLoading(true);
-			try {
-				const response = await fetch(
-					`http://${currentServer?.ip}:3000/drives`
-				);
-				const data = await response.json();
-				setDrives(data);
-			} catch (error) {
-				console.error("Error fetching drives:", error);
-			}
-			setLoading(false);
-		};
-		fetchDrives();
-	}, []);
-
-	// useEffect(() => {
-	// 	if (drives && drives.length > 0) {
-	// 		handleFolderClick(drives[0]);
-	// 	}
-	// }, [drives]);
+		if (folderSelectMenuOpen) {
+			fetchData(
+				`http://${currentServer?.ip}:3000/drives`,
+				(data) => setDrives(data),
+				(err) => console.error("Error fetching drives:", err)
+			);
+		}
+	}, [folderSelectMenuOpen]);
 
 	// Fetch para obtener el contenido de una carpeta
 	const fetchFolderContent = async (path: string) => {
-		setLoading(true);
-		try {
-			const response = await fetch(
-				`http://${currentServer?.ip}:3000/folder/${path}`
-			);
-			const data = await response.json();
-			setFolderContent(data);
-			setCurrentPath(path);
-		} catch (error) {
-			console.error("Error fetching folder content:", error);
-		}
-		setLoading(false);
+		fetchData(
+			`http://${currentServer?.ip}:3000/folder/${encodeURIComponent(path)}`,
+			(data) => {
+				setFolderContent(data);
+				setCurrentPath(path);
+			},
+			(_err) => setFolderContent([])
+		);
 	};
 
 	// Manejador para cuando el usuario selecciona una carpeta o unidad
 	const handleFolderClick = (folder: string) => {
-		if (folder === ".. [Back]" && !drives.includes(folder)) {
-			// Ir a la carpeta superior
+		if (folder === ".. [Back]") {
+			if (drives.includes(currentPath)) return;
+
 			const upperPath = currentPath.split("\\").slice(0, -1).join("\\");
 			fetchFolderContent(upperPath || ""); // Si es raíz, reiniciar ruta
 		} else {
@@ -78,7 +76,7 @@ const FolderSelector = () => {
 
 		return (
 			<ul>
-				{/* Agregar opción para regresar */}
+				{/* Go Back button */}
 				{currentPath && (
 					<li
 						onClick={() => handleFolderClick(".. [Back]")}
@@ -88,7 +86,8 @@ const FolderSelector = () => {
 						.. [Back]
 					</li>
 				)}
-				{/* Mostrar carpetas */}
+
+				{/* Folders */}
 				{folderContent &&
 					folderContent.map(
 						(item: { name: string; isFolder: boolean }, index) =>
@@ -110,60 +109,66 @@ const FolderSelector = () => {
 		);
 	};
 
-	const getUserFromPath = (drive: string) => {
-		// Utilizamos una expresión regular para capturar la parte después del último separador
-		const parts = drive.split(/[\\/]/); // Separar por / o \
-		return parts.pop(); // Obtener el último elemento de la ruta
+	/**
+	 * Extracts the username from the given path.
+	 * @param {string} path
+	 * @returns {string} the username
+	 */
+	const getUserFromPath = (path: string) => {
+		const parts = path.split(/[\\/]/);
+		return parts.pop();
 	};
 
 	return (
-		<section className="folder-selector">
-			<span>Añadir carpeta</span>
-			<input
-				type="text"
-				value={currentPath}
-				readOnly
-				style={{ width: "100%", marginBottom: "10px" }}
+		<DialogTemplate
+			menuOpen={folderSelectMenuOpen}
+			title={t("folders")}
+			secondary
+			cancelAction={() => dispatch(toggleFolderSelectionMenu())}
+		>
+			<DialogCenter>
+				<DialogCenterContent>
+					<span>Añadir carpeta</span>
+					<input
+						type="text"
+						value={currentPath}
+						readOnly
+						style={{ width: "100%", marginBottom: "10px" }}
+					/>
+					<div className="sections">
+						<div className="drives-list">
+							<ul>
+								{drives.length > 0 &&
+									drives.map((drive, index) => (
+										<li
+											key={index}
+											onClick={() => fetchFolderContent(drive)}
+											style={{ cursor: "pointer" }}
+										>
+											{index === 0 ? (
+												<HomeFullDefaultIcon />
+											) : (
+												<FolderIcon />
+											)}{" "}
+											{index === 0 ? getUserFromPath(drive) : drive}
+										</li>
+									))}
+							</ul>
+						</div>
+						<div className="folder-list">
+							{currentPath && renderFolderContent()}
+						</div>
+					</div>
+				</DialogCenterContent>
+			</DialogCenter>
+			<DialogBottom
+				cancelAction={() => dispatch(toggleFolderSelectionMenu())}
+				acceptAction={() => {
+					dispatch(toggleFolderSelectionMenu());
+					onAccept(currentPath);
+				}}
 			/>
-			<div className="sections">
-				<div className="drives-list">
-					<ul>
-						{drives.length > 0 &&
-							drives.map((drive, index) => (
-								<li
-									key={index}
-									onClick={() => fetchFolderContent(drive)}
-									style={{ cursor: "pointer" }}
-								>
-									{index === 0 ? (
-										<HomeFullDefaultIcon />
-									) : (
-										<FolderIcon />
-									)}{" "}
-									{index === 0 ? getUserFromPath(drive) : drive}
-								</li>
-							))}
-					</ul>
-				</div>
-				<div className="folder-list">
-					{currentPath && renderFolderContent()}
-				</div>
-			</div>
-			<section className="dialog-bottom">
-				<button
-					className="desktop-dialog-btn"
-					onClick={() => console.log("Cancelar")}
-				>
-					{t("cancelButton")}
-				</button>
-				<button
-					className="btn-app-color"
-					onClick={() => console.log("Añadir carpeta:", currentPath)}
-				>
-					{t("saveButton")}
-				</button>
-			</section>
-		</section>
+		</DialogTemplate>
 	);
 };
 

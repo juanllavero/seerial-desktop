@@ -1,7 +1,7 @@
 import Loading from "@components/utils/Loading";
 import { LibraryData } from "@interfaces/LibraryData";
 import { setLibraries } from "@redux/slices/dataSlice";
-import useFetchArray from "hooks/useFetch";
+import useFetchArray from "hooks/useFetchArray";
 import { useEffect } from "react";
 import NoContent from "./noContent/NoContent";
 import RightPanel from "./RightPanel";

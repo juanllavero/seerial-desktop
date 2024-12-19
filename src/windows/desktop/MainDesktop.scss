@@ -275,6 +275,14 @@ html, body {
     z-index: 0;
   }
 
+  .popUp-dialog-background {
+    position: absolute;
+    width: 100dvw;
+    height: 100dvh;
+    background-color: #00000077;
+    z-index: 0;
+  }
+
   .dialog-box {
     z-index: 1;
     position: relative;

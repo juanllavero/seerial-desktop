@@ -14,6 +14,7 @@ const initialState = {
     episodeMenu: false,
     mainMenu: false,
     settingsMenu: false,
+    folderSelectionMenu: false,
 };
 
 const contextMenuSlice = createSlice({
@@ -75,10 +76,13 @@ reducers: {
     },
     toggleServerMenu: (state) => {
         state.serverMenu = !state.serverMenu;
+    },
+    toggleFolderSelectionMenu: (state) => {
+        state.folderSelectionMenu = !state.folderSelectionMenu;
     }
 },
 });
 
 export const { closeAllMenus, closeContextMenu, toggleContextMenu, toggleVideoMenu, toggleAudioMenu, toggleSubsMenu, toggleSubsSizeMenu, toggleLibraryMenu, 
-    toggleLibraryMenuSecondary, toggleSeriesMenu, toggleSeasonMenu, toggleEpisodeMenu, toggleMainMenu, toggleSettingsMenu, toggleServerMenu } = contextMenuSlice.actions;
+    toggleLibraryMenuSecondary, toggleSeriesMenu, toggleSeasonMenu, toggleEpisodeMenu, toggleMainMenu, toggleSettingsMenu, toggleServerMenu, toggleFolderSelectionMenu } = contextMenuSlice.actions;
 export default contextMenuSlice.reducer;
