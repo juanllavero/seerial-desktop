@@ -1,4 +1,5 @@
 interface Server {
-	name: string;
-	ip: string;
+  name: string;
+  ip: string;
+  online: boolean;
 }

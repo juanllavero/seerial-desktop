@@ -202,6 +202,7 @@ function MainDesktop() {
 					}
 				}}
 			>
+				<div className="background-filter"></div>
 				<MainBackgroundImage />
 				{selectedSeason && selectedSeason.backgroundSrc !== "" && (
 					<div className="noise-background"></div>

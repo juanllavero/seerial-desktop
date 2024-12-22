@@ -194,7 +194,7 @@ function DetailsSection() {
 							<span id="seriesTitle">{selectedSeries.name}</span>
 						)}
 					</div>
-					{selectedSeason.backgroundSrc != "" ? (
+					{/*selectedSeason.backgroundSrc != "" ? (
 						<div className="background-image">
 							<Image
 								src={selectedSeason.backgroundSrc}
@@ -205,7 +205,7 @@ function DetailsSection() {
 								className={transparentImageLoaded ? "imageLoaded" : ""}
 							/>
 						</div>
-					) : null}
+					) : null*/}
 					<div className="info-container">
 						<div
 							className={`poster-image ${

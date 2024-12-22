@@ -161,7 +161,10 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 				cancelAction={() => dispatch(toggleFolderSelectionMenu())}
 				acceptAction={() => {
 					dispatch(toggleFolderSelectionMenu());
-					onAccept(currentPath);
+					
+					if (currentPath && currentPath !== "") {
+						onAccept(currentPath);
+					}
 				}}
 			/>
 		</DialogTemplate>

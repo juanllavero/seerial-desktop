@@ -68,8 +68,6 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 			const data = await Promise.race([fetchPromise, timeoutPromise]);
 			setServerStatus(data.status != undefined);
 
-			console.log(data.status);
-
 			setApiKeyStatus(data.status === "VALID_API_KEY");
 			setGettingApiKeyStatus(false);
 		} catch (error) {
