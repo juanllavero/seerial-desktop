@@ -7,6 +7,8 @@ import { SeriesData } from "@interfaces/SeriesData";
 export interface ElectronAPI {
   on(arg0: string, handleResize: () => Promise<void>): void;
   off(arg0: string, handleResize: () => Promise<void>): void;
+  getConfig: (key: string, defaultValue: any) => string,
+  setConfig: (key: string, config: any) => void,
   translate: (key) => String,
   setFullscreenControls: () => void,
   getServersData: () => Promise<Server[]>;

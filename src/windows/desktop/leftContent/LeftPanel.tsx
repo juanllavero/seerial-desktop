@@ -11,7 +11,6 @@ import {
 import LibrariesList from "./LibrariesList";
 import { useDispatch, useSelector } from "react-redux";
 import { useSectionContext } from "context/section.context";
-import MoreSection from "./MoreSection";
 import SettingsPanel from "./SettingsPanel";
 import { LeftPanelSections, RightPanelSections } from "@data/enums/Sections";
 import { LibraryData } from "@interfaces/LibraryData";
@@ -24,13 +23,11 @@ import { ContextMenu } from "primereact/contextmenu";
 import { RootState } from "@redux/store";
 import { confirmDialog } from "primereact/confirmdialog";
 import { ReactUtils } from "@data/utils/ReactUtils";
-import { useDataContext } from "context/data.context";
 
 function LeftPanel() {
 	const dispatch = useDispatch();
 	const { currentLeftSection, setCurrentLeftSection, setCurrentRightSection } =
 		useSectionContext();
-	const { serverForMenu } = useDataContext();
 	const [menuContracted, setMenuContracted] = useState<boolean>(false);
 
 	const libraries = useSelector((state: RootState) => state.data.libraries);
@@ -129,12 +126,6 @@ function LeftPanel() {
 				dispatch(toggleLibraryEditWindow());
 			},
 		},
-		{
-			label: t("removeButton"),
-			command: () => {
-				showDeleteDialogServer();
-			},
-		},
 	];
 
 	const showDeleteDialog = () => {
@@ -154,24 +145,6 @@ function LeftPanel() {
 		}
 	};
 
-	const showDeleteDialogServer = () => {
-		confirmDialog({
-			message: t("removeServerMessage"),
-			header: `${t("removeLibrary")}: ${serverForMenu?.ip}`,
-			icon: "pi pi-info-circle",
-			defaultFocus: "reject",
-			acceptClassName: "p-button-danger",
-			accept: acceptServer,
-		});
-	};
-
-	const acceptServer = () => {
-		if (serverForMenu) {
-			console.log("delete server " + serverForMenu.ip);
-			//window.electronAPI.deleteLibrary(libraryForMenu);
-		}
-	};
-
 	return (
 		<section
 			className={`left-panel ${
@@ -181,16 +154,6 @@ function LeftPanel() {
 			}`}
 		>
 			<div className="top-controls">
-				{/* <button
-					className="svg-add-library-btn select"
-					onClick={() => {
-						dispatch(setLibraryForMenu(undefined));
-						dispatch(toggleLibraryEditWindow());
-					}}
-				>
-					<AddIcon />
-					<span>{t("libraryWindowTitle")}</span>
-				</button> */}
 				{currentLeftSection !== LeftPanelSections.Settings ? (
 					<>
 						<button
@@ -226,8 +189,6 @@ function LeftPanel() {
 			{/* Left Panel Content */}
 			{currentLeftSection === LeftPanelSections.Settings ? (
 				<SettingsPanel />
-			) : currentLeftSection === LeftPanelSections.More ? (
-				<MoreSection cm={cm2} cmServer={cm3} handleSelectLibrary={handleSelectLibrary} />
 			) : (
 				<LibrariesList cm={cm} handleSelectLibrary={handleSelectLibrary} />
 			)}

@@ -25,7 +25,7 @@ function Image({
 	className,
 	onLoad,
 }: ImageProps) {
-	const { currentServer } = useDataContext();
+	const { serverIP } = useDataContext();
 	return (
 		<>
 			{isRelative ? (
@@ -34,7 +34,7 @@ function Image({
 					src={
 						src.startsWith("http")
 							? src
-							: `http://${currentServer?.ip}:3000/${src}`
+							: `http://${serverIP}:3000/${src}`
 					}
 					alt={alt}
 					style={{

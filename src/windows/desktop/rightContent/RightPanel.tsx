@@ -4,13 +4,13 @@ import { RootState } from "@redux/store";
 import { LeftPanelSections, RightPanelSections } from "@data/enums/Sections";
 import { useSectionContext } from "context/section.context";
 import "./RightPanel.scss";
-import NoContent from "./noContent/NoContent";
 import CollectionsList from "./collections/CollectionsList";
 import DetailsSection from "./details/DetailsSection";
 import HomeSection from "./home/HomeSection";
 import MusicSection from "./music/MusicSection";
 import MusicDetails from "./music/MusicDetails";
 import SettingsRightPanel from "./SettingsRightPanel";
+import NoContent from "./utils/NoContent";
 
 /**
  * The RightPanel component is responsible for rendering the correct content

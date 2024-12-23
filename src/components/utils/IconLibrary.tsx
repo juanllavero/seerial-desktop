@@ -409,8 +409,8 @@ export const AddIcon = () => (
 		strokeLinejoin="round"
 		id="plex-icon-add-560"
 		aria-hidden="true"
-		width="48"
-		height="48"
+		width="28"
+		height="28"
 	>
 		<path
 			d="m320 320l0 200-80 0 0-200-200 0 0-80 200 0 0-200 80 0 0 200 200 0 0 80-200 0"

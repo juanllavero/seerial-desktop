@@ -1,19 +1,14 @@
 import React, { useContext, useEffect } from "react";
 
 interface DataContextProps {
-	currentServer: Server | undefined;
-	setCurrentServer: (server: Server) => void;
+	serverIP:string;
+	setServerIP: (ip: string) => void;
 	serverStatus: boolean;
 	gettingServerStatus: boolean;
 	apiKeyStatus: boolean;
 	gettingApiKeyStatus: boolean;
 	getServerStatus: () => void;
-	serverList: Server[];
-	setServerList: (serverList: Server[]) => void;
 	setApiKey: (apiKey: string) => void;
-	serverForMenu: Server | undefined;
-	setServerForMenu: (server: Server) => void;
-	removeServer: (server: Server) => void;
 }
 
 export const DataContext = React.createContext<DataContextProps | undefined>(
@@ -21,32 +16,22 @@ export const DataContext = React.createContext<DataContextProps | undefined>(
 );
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
-	const [currentServer, setCurrentServer] = React.useState<Server | undefined>(
-		undefined
-	);
-	const [serverForMenu, setServerForMenu] = React.useState<Server | undefined>();
+	const [serverIP, setServerIP] = React.useState<string>("");
 	const [serverStatus, setServerStatus] = React.useState<boolean>(false);
 	const [gettingServerStatus, setGettingServerStatus] =
 		React.useState<boolean>(false);
 	const [apiKeyStatus, setApiKeyStatus] = React.useState<boolean>(false);
 	const [gettingApiKeyStatus, setGettingApiKeyStatus] =
 		React.useState<boolean>(false);
-	const [serverList, setServerList] = React.useState<Server[]>([]);
 
 	// Check server status and api key status every time the currentServer changes
 	useEffect(() => {
 		getServerStatus();
-	}, [currentServer]);
-
-	useEffect(() => {
-		if (serverList && serverList.length > 0) {
-			setCurrentServer(serverList[0]);
-		}
-	}, [serverList]);
+	}, [serverIP]);
 
 	// Check server status and api key status
 	const getServerStatus = async () => {
-		if (!currentServer) return;
+		if (serverIP === "") return;
 
 		setGettingServerStatus(true);
 
@@ -59,13 +44,14 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 		);
 
 		// Fetch server status
-		const fetchPromise = fetch(`http://${currentServer.ip}:3000/`).then(
+		const fetchPromise = fetch(`http://${serverIP}:3000/`).then(
 			(response) => response.json()
 		);
 
 		try {
 			// Cancel fetch if 10 seconds pass
 			const data = await Promise.race([fetchPromise, timeoutPromise]);
+
 			setServerStatus(data.status != undefined);
 
 			setApiKeyStatus(data.status === "VALID_API_KEY");
@@ -79,10 +65,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
 	// Set api key in server
 	const setApiKey = async (apiKey: string) => {
-		if (!currentServer) return;
+		if (serverIP === "") return;
 
 		setGettingApiKeyStatus(true);
-		const response = await fetch(`http://${currentServer.ip}:3000/api-key`, {
+		const response = await fetch(`http://${serverIP}:3000/api-key`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -95,26 +81,17 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 		setGettingApiKeyStatus(false);
 	};
 
-	const removeServer = (server: Server) => {
-		setServerList(serverList.filter((s) => s.ip !== server.ip));
-	};
-
 	return (
 		<DataContext.Provider
 			value={{
-				currentServer,
-				setCurrentServer,
+				serverIP,
+				setServerIP,
 				serverStatus,
 				gettingServerStatus,
 				apiKeyStatus,
 				gettingApiKeyStatus,
 				getServerStatus,
-				serverList,
-				setServerList,
 				setApiKey,
-				serverForMenu,
-				setServerForMenu,
-				removeServer,
 			}}
 		>
 			{children}

@@ -15,7 +15,7 @@ import "../utils/utils.scss";
 import "../../i18n";
 import { toggleMaximize } from "redux/slices/windowStateSlice";
 import { closeVideo } from "redux/slices/videoSlice";
-import { closeAllMenus } from "redux/slices/contextMenuSlice";
+import { closeAllMenus, toggleAddServerMenu } from "redux/slices/contextMenuSlice";
 import { LibraryData } from "@interfaces/LibraryData";
 import { ReactUtils } from "data/utils/ReactUtils";
 import { setGradientLoaded } from "redux/slices/imageLoadedSlice";
@@ -35,17 +35,14 @@ import StatusRightPanelMessageAPI from "./rightContent/StatusRightPanelMessageAP
 import RightContent from "./rightContent/RightContent";
 import LeftPanel from "./leftContent/LeftPanel";
 import AddServer from "@components/desktop/windows/AddServer";
+import ConfigManager from "@data/utils/Configuration";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
+	const configManager = ConfigManager.getInstance();
 
-	const {
-		serverStatus,
-		apiKeyStatus,
-		getServerStatus,
-		currentServer,
-		setServerList,
-	} = useDataContext();
+	const { serverIP, serverStatus, apiKeyStatus, getServerStatus, setServerIP } =
+		useDataContext();
 
 	const isVideoLoaded = useSelector(
 		(state: RootState) => state.video.isLoaded
@@ -62,9 +59,11 @@ function MainDesktop() {
 	const [gradientBackground, setGradientBackground] = useState<string>("");
 
 	useEffect(() => {
-		window.electronAPI.getServersData().then((serversData: Server[]) => {
-			setServerList(serversData);
-		}).catch((error) => console.log(error));
+		const getServerIP = async () => {
+			setServerIP(await configManager.get("serverIP", ""));
+		};
+
+		getServerIP();
 	}, []);
 
 	useEffect(() => {
@@ -202,7 +201,6 @@ function MainDesktop() {
 					}
 				}}
 			>
-				
 				<MainBackgroundImage />
 				{selectedSeason && selectedSeason.backgroundSrc !== "" && (
 					<>
@@ -219,9 +217,17 @@ function MainDesktop() {
 				{/* Right Panel */}
 				<section className="right-panel">
 					<TopBar />
-					{!serverStatus ? (
+					{serverIP === ""? (
 						<StatusRightPanelMessage
-							title={`${currentServer?.name} no está disponible en este momento`}
+							title={`No hay ningún servidor registrado`}
+							subtitle="Registre un servidor para poder utilizar la aplicación."
+							containsButton={true}
+							action={() => dispatch(toggleAddServerMenu())}
+							buttonText="Añadir servidor"
+						/>
+					) : !serverStatus ? (
+						<StatusRightPanelMessage
+							title={`El servidor no está disponible en este momento`}
 							subtitle="Verifique que tenga una conexión de red y que el servidor esté en
 				línea."
 							containsButton={true}
@@ -230,7 +236,7 @@ function MainDesktop() {
 						/>
 					) : !apiKeyStatus ? (
 						<StatusRightPanelMessageAPI
-							title={`${currentServer?.name} no cuenta con una clave de API`}
+							title={`El servidor no cuenta con una clave de API`}
 							subtitle="Añada una clave de API para TheMovieDB."
 							containsButton={true}
 							buttonText="Comprobar clave API"

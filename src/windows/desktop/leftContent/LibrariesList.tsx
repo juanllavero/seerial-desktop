@@ -8,7 +8,8 @@ import { LibraryData } from "@interfaces/LibraryData";
 import "./LibrariesList.scss";
 import LibraryButton from "./utils/LibraryButton";
 import HomeButton from "./utils/HomeButton";
-import LeftSectionChangeButton from "./utils/LeftSectionChangeButton";
+import AddLibraryButton from "./utils/AddLibraryButton";
+import { useDataContext } from "context/data.context";
 
 /**
  * A component that displays a list of libraries and allows the user to select a library,
@@ -24,6 +25,7 @@ function LibrariesList({
 	handleSelectLibrary: (library: LibraryData | null) => void;
 }) {
 	const dispatch = useDispatch();
+	const { serverIP, apiKeyStatus } = useDataContext();
 	const libraries = useSelector((state: RootState) => state.data.libraries);
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.selectedLibrary
@@ -94,7 +96,8 @@ function LibrariesList({
 						)
 					);
 				})}
-				<LeftSectionChangeButton />
+
+				{serverIP !== "" && apiKeyStatus && <AddLibraryButton />}
 			</div>
 		</>
 	);

@@ -25,26 +25,12 @@ let win: BrowserWindow | null;
 let controlsWindow: BrowserWindow | null;
 let mpvController: MPVController | null = null;
 
-ipcMain.handle("get-servers-data", async () => {
-	return serversList;
-});
 //#endregion
 
 //#region CONFIGURATION FILE
 const configPath = app.isPackaged
 	? path.join(path.dirname(app.getPath("exe")), "resources/config/config.json")
 	: path.join(app.getAppPath(), "resources/config/config.json");
-const serversPath = app.isPackaged
-	? path.join(path.dirname(app.getPath("exe")), "resources", "servers.json")
-	: path.join(app.getAppPath(), "resources", "servers.json");
-let serversList: Server[] = [];
-
-if (fs.existsSync(serversPath)) {
-	const data = fs.readFileSync(serversPath, "utf-8");
-	serversList = JSON.parse(data);
-} else {
-	fs.writeFileSync(serversPath, JSON.stringify([], null, 2));
-}
 
 // Cargar o crear la configuración
 function loadOrCreateConfig(): Record<string, any> {
@@ -63,7 +49,7 @@ function saveConfig(config: Record<string, any>): void {
 	fs.writeFileSync(configPath, JSON.stringify(config, null, 2), "utf-8");
 }
 
-/*let configData = loadOrCreateConfig();
+let configData = loadOrCreateConfig();
 
 // IPC Handlers para `get` y `set`
 ipcMain.handle("get-config", (_event, key: string, defaultValue: any) => {
@@ -77,7 +63,7 @@ ipcMain.handle("get-config", (_event, key: string, defaultValue: any) => {
 ipcMain.handle("set-config", (_event, key: string, value: any) => {
 	configData[key] = value;
 	saveConfig(configData);
-});*/
+});
 //#endregion
 
 //#region LOCALIZATION

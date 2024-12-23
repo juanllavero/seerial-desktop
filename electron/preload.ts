@@ -11,6 +11,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	minimizeWindow: () => ipcRenderer.send("minimize-window"),
 	maximizeWindow: () => ipcRenderer.send("maximize-window"),
 	closeWindow: () => ipcRenderer.send("close-window"),
+	getConfig: (key: string, defaultValue: any) => ipcRenderer.invoke("get-config", key, defaultValue),
+	setConfig: (key: string, config: any) => ipcRenderer.invoke("set-config", key, config),
 	scanFiles: (library: LibraryData) =>
 		ipcRenderer.invoke("scan-files", library),
 	updateLibrary: (library: LibraryData) =>
