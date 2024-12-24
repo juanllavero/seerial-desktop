@@ -16,7 +16,7 @@ function RightContent() {
 	const { currentLeftSection } = useSectionContext();
 	const { serverIP } = useDataContext();
 	const { data, loading, error } = useFetchArray<LibraryData>(
-		`http://${serverIP}:3000/libraries`
+		`https://${serverIP}/libraries`
 	);
 
 	useEffect(() => {

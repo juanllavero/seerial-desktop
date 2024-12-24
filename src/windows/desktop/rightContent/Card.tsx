@@ -18,12 +18,13 @@ import {
 } from "@redux/slices/dataSlice";
 import { t } from "i18next";
 import { ContextMenu } from "primereact/contextmenu";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { EditIcon, VerticalDotsIcon } from "@components/utils/IconLibrary";
 import { LibraryData } from "@interfaces/LibraryData";
 import { ReactUtils } from "@data/utils/ReactUtils";
 import { useSectionContext } from "context/section.context";
 import { RightPanelSections } from "@data/enums/Sections";
+import { useDataContext } from "context/data.context";
 
 interface CardProps {
 	library?: LibraryData;
@@ -44,6 +45,7 @@ interface CardProps {
  */
 function Card(props: CardProps): JSX.Element {
 	const dispatch = useDispatch();
+	const { serverIP } = useDataContext();
 	const { setCurrentRightSection } = useSectionContext();
 	const { library, show, season, type } = props;
 	const seriesImageWidth = useSelector(
@@ -53,11 +55,13 @@ function Card(props: CardProps): JSX.Element {
 		(state: RootState) => state.seriesImage.height
 	);
 
+	const series = useSelector((state: RootState) => state.data.selectedSeries);
+
 	const cm = useRef<ContextMenu | null>(null);
 
 	const handleSeriesSelection = (series: SeriesData) => {
 		if (type === "music") {
-			ReactUtils.generateGradient(series, null);
+			ReactUtils.generateGradient(series, null, serverIP);
 			setCurrentRightSection(RightPanelSections.MusicDetails);
 		} else {
 			setCurrentRightSection(RightPanelSections.Details);
@@ -66,13 +70,10 @@ function Card(props: CardProps): JSX.Element {
 		dispatch(selectSeries(series));
 
 		if (series.seasons && series.seasons.length > 0)
-			handleSeasonSelection(series, series.seasons[0]);
+			handleSeasonSelection(series.seasons[0]);
 	};
 
-	const handleSeasonSelection = (series: SeriesData, season: SeasonData) => {
-		if (type === "music" && season)
-			ReactUtils.generateGradient(series, season);
-
+	const handleSeasonSelection = (season: SeasonData) => {
 		dispatch(selectSeason(season));
 		dispatch(closeContextMenu());
 	};

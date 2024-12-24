@@ -27,7 +27,7 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 		{ name: string; isFolder: boolean }[]
 	>([]); // Contenido de la carpeta
 	const [currentPath, setCurrentPath] = useState<string>(""); // Ruta actual
-	const { currentServer } = useDataContext();
+	const { serverIP } = useDataContext();
 
 	const folderSelectMenuOpen = useSelector(
 		(state: RootState) => state.contextMenu.folderSelectionMenu
@@ -37,7 +37,7 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 	useEffect(() => {
 		if (folderSelectMenuOpen) {
 			fetchData(
-				`http://${currentServer?.ip}:3000/drives`,
+				`https://${serverIP}/drives`,
 				(data) => setDrives(data),
 				(err) => console.error("Error fetching drives:", err)
 			);
@@ -47,7 +47,7 @@ const FolderSelector = ({ onAccept }: { onAccept: (path: string) => void }) => {
 	// Fetch para obtener el contenido de una carpeta
 	const fetchFolderContent = async (path: string) => {
 		fetchData(
-			`http://${currentServer?.ip}:3000/folder/${encodeURIComponent(path)}`,
+			`https://${serverIP}/folder/${encodeURIComponent(path)}`,
 			(data) => {
 				setFolderContent(data);
 				setCurrentPath(path);

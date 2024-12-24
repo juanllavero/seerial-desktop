@@ -44,7 +44,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 		);
 
 		// Fetch server status
-		const fetchPromise = fetch(`http://${serverIP}:3000/`).then(
+		const fetchPromise = fetch(`https://${serverIP}/`).then(
 			(response) => response.json()
 		);
 
@@ -68,7 +68,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 		if (serverIP === "") return;
 
 		setGettingApiKeyStatus(true);
-		const response = await fetch(`http://${serverIP}:3000/api-key`, {
+		const response = await fetch(`https://${serverIP}/api-key`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

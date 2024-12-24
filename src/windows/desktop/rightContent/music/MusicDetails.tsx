@@ -21,10 +21,13 @@ import "./MusicDetails.scss";
 import Image from "@components/image/Image";
 import { SeasonData } from "@interfaces/SeasonData";
 import SongItem from "./SongItem";
+import { ReactUtils } from "@data/utils/ReactUtils";
+import { useDataContext } from "context/data.context";
 
 function MusicDetails() {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const { serverIP } = useDataContext();
 
 	//const [selectionMode, setSelectionMode] = useState<boolean>(false);
 	//const [selectedElements, setSelectedElements] = useState<EpisodeData[]>([]);
@@ -51,6 +54,15 @@ function MusicDetails() {
 	const cm3 = useRef<ContextMenu | null>(null);
 
 	const handleSeasonSelection = (season: SeasonData) => {
+		if (
+			selectedLibrary &&
+			selectedLibrary.type === "Music" &&
+			selectedCollection &&
+			season
+		) {
+			ReactUtils.generateGradient(selectedCollection, season, serverIP);
+		}
+
 		dispatch(selectSeason(season));
 		dispatch(closeContextMenu());
 	};
@@ -75,7 +87,7 @@ function MusicDetails() {
 
 		return foundDiscs;
 	};
-	
+
 	const handleRenderSongs = () => {
 		const discs = getDiscs();
 
@@ -85,19 +97,21 @@ function MusicDetails() {
 			return (
 				<>
 					<span className="disc-text-title">
-						{selectedAlbum.episodes && selectedAlbum.episodes.length} {t("tracks").toLowerCase()}
+						{selectedAlbum.episodes && selectedAlbum.episodes.length}{" "}
+						{t("tracks").toLowerCase()}
 					</span>
-					{selectedAlbum.episodes && selectedAlbum.episodes
-						.slice()
-						.sort((a, b) => {
-							const episodeNumberA = a.episodeNumber ?? 0; // Si es undefined o null, usa 0 como valor por defecto
-							const episodeNumberB = b.episodeNumber ?? 0;
+					{selectedAlbum.episodes &&
+						selectedAlbum.episodes
+							.slice()
+							.sort((a, b) => {
+								const episodeNumberA = a.episodeNumber ?? 0; // Si es undefined o null, usa 0 como valor por defecto
+								const episodeNumberB = b.episodeNumber ?? 0;
 
-							return episodeNumberA - episodeNumberB;
-						})
-						.map((song: EpisodeData, index: number) => (
-							<SongItem key={song.id} song={song} index={index} />
-						))}
+								return episodeNumberA - episodeNumberB;
+							})
+							.map((song: EpisodeData, index: number) => (
+								<SongItem key={song.id} song={song} index={index} />
+							))}
 				</>
 			);
 		} else {

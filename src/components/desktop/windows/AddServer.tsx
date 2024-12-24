@@ -22,12 +22,6 @@ function AddServer() {
 
   const [ip, setIp] = React.useState("");
 
-  const handleIpChange = (value: string) => {
-    if (value.length <= 15 && /^[0-9.]*$/.test(value)) {
-      setIp(value);
-    }
-  };
-
   return (
     <DialogTemplate
       menuOpen={addServerMenu}
@@ -41,7 +35,7 @@ function AddServer() {
             type="text"
             placeholder={`Ej. 192.168.1.10`}
             value={ip}
-            onChange={(e) => handleIpChange(e.target.value)}
+            onChange={(e) => setIp(e.target.value)}
           />
         </DialogCenterContent>
       </DialogCenter>

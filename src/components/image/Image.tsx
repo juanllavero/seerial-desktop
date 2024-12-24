@@ -34,7 +34,7 @@ function Image({
 					src={
 						src.startsWith("http")
 							? src
-							: `http://${serverIP}:3000/${src}`
+							: `https://${serverIP}/${src}`
 					}
 					alt={alt}
 					style={{
