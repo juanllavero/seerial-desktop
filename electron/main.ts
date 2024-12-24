@@ -25,6 +25,29 @@ let win: BrowserWindow | null;
 let controlsWindow: BrowserWindow | null;
 let mpvController: MPVController | null = null;
 
+// External path
+const extPath = app.isPackaged
+	? path.dirname(app.getPath("exe"))
+	: app.getAppPath();
+
+const createFolder = (folder: string) => {
+	if (!fs.existsSync(folder)) {
+		fs.mkdirSync(folder);
+	}
+};
+
+// Create resources and config folders
+createFolder(path.join(extPath, "resources"));
+createFolder(path.join(extPath, "resources/config"));
+
+// Create config.json if it doesn't exist
+if (!fs.existsSync(path.join(extPath, "resources/config/config.json"))) {
+	fs.writeFileSync(
+		path.join(extPath, "resources/config/config.json"),
+		JSON.stringify({ language: "es-ES" }, null, 2),
+		"utf-8"
+	);
+}
 //#endregion
 
 //#region CONFIGURATION FILE
