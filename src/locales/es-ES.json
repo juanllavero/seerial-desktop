@@ -83,7 +83,6 @@
     "audioErrorFormat": "El audio tiene que acabar en '.mp3', '.wav', '.flac' o '.aac'",
     "sortingError": "El orden tiene que ser un número",
     "audioNotFound": "Audio no encontrado",
-    "selectImage": "Selecciona una imagen",
     "allImages": "Todas las imágenes",
     "folder": "Carpeta",
     "file": "Archivo",
@@ -201,5 +200,14 @@
     "tracks": "Pistas",
     "home": "Inicio",
     "noVideoFound": "No hay ningún vídeo cargado",
-    "noMusicFound": "No hay ninguna canción cargada"
+    "noMusicFound": "No hay ninguna canción cargada",
+    "client": "Cliente",
+    "server": "Servidor",
+    "quality": "Calidad",
+    "player": "Reproductor",
+    "languages": "Idiomas",
+    "libraries": "Bibliotecas",
+    "transcode": "Transcodificación",
+    "serverIP": "IP del servidor",
+    "serverIPText": "El puerto ha de ser el 3000"
   }

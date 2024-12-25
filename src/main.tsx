@@ -8,6 +8,7 @@ import "./index.scss";
 import { SectionProvider } from "context/section.context";
 import { DownloadProvider } from "context/download.context";
 import { DataProvider } from "context/data.context";
+import { SettingsProvider } from "context/settings.context";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<PrimeReactProvider>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 			<SectionProvider>
 				<DownloadProvider>
 					<DataProvider>
-						<MainDesktop />
+						<SettingsProvider>
+							<MainDesktop />
+						</SettingsProvider>
 					</DataProvider>
 				</DownloadProvider>
 			</SectionProvider>

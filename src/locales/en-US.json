@@ -83,7 +83,6 @@
     "audioErrorFormat": "Audio has to be '.mp3', '.wav', '.flac' or '.aac'",
     "sortingError": "Sorting order has to be a number",
     "audioNotFound": "Audio not found",
-    "selectImage": "Select an image",
     "allImages": "All images",
     "folder": "Folder",
     "file": "File",
@@ -201,5 +200,14 @@
     "tracks": "Tracks",
     "home": "Home",
     "noVideoFound": "There is no video loaded",
-    "noMusicFound": "There is no song loaded"
+    "noMusicFound": "There is no song loaded",
+    "client": "Client",
+    "server": "Server",
+    "quality": "Quality",
+    "player": "Player",
+    "languages": "Languages",
+    "libraries": "Libraries",
+    "transcode": "Transcode",
+    "serverIP": "Server IP",
+    "serverIPText": "The port has to be 3000"
   }

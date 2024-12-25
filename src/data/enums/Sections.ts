@@ -19,6 +19,16 @@ export enum RightPanelSections {
     NoContent
 };
 
+export enum SettingsSections {
+    ClientGeneral = 1,
+    ClientPlayer,
+    ClientQuality,
+    ServerGeneral,
+    ServerTranscode,
+    ServerLibrary,
+    ServerLanguages
+}
+
 export enum LeftPanelSections {
     Pinned = 1,
     More,

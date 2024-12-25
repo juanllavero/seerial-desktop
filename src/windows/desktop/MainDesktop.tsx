@@ -23,7 +23,6 @@ import { SeriesData } from "@interfaces/SeriesData";
 import { SeasonData } from "@interfaces/SeasonData";
 import { EpisodeData } from "@interfaces/EpisodeData";
 import TopBar from "./rightContent/utils/TopBar";
-import DesktopSettings from "@components/desktop/windows/desktopSettings";
 import EpisodeWindow from "@components/desktop/windows/episodeWindow";
 import LibraryWindow from "@components/desktop/windows/libraryWindow";
 import SeasonWindow from "@components/desktop/windows/seasonWindow";
@@ -36,10 +35,14 @@ import RightContent from "./rightContent/RightContent";
 import LeftPanel from "./leftContent/LeftPanel";
 import AddServer from "@components/desktop/windows/AddServer";
 import ConfigManager from "@data/utils/Configuration";
+import { LeftPanelSections } from "@data/enums/Sections";
+import { useSectionContext } from "context/section.context";
+import SettingsRightPanel from "./rightContent/SettingsRightPanel";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
 	const configManager = ConfigManager.getInstance();
+	const { currentLeftSection } = useSectionContext();
 
 	const { serverIP, serverStatus, apiKeyStatus, getServerStatus, setServerIP } =
 		useDataContext();
@@ -178,7 +181,6 @@ function MainDesktop() {
 			) : null}
 
 			{/* PopUp Windows */}
-			<DesktopSettings />
 			<LibraryWindow />
 			<SeriesWindow />
 			<SeasonWindow />
@@ -225,6 +227,8 @@ function MainDesktop() {
 							action={() => dispatch(toggleAddServerMenu())}
 							buttonText="Añadir servidor"
 						/>
+					) : currentLeftSection === LeftPanelSections.Settings ? (
+						<SettingsRightPanel />
 					) : !serverStatus ? (
 						<StatusRightPanelMessage
 							title={`El servidor no está disponible en este momento`}

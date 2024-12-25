@@ -1,6 +1,6 @@
 import Loading from "@components/utils/Loading";
 import { LibraryData } from "@interfaces/LibraryData";
-import { setLibraries, toggleLibraryEditWindow } from "@redux/slices/dataSlice";
+import { setLibraries } from "@redux/slices/dataSlice";
 import useFetchArray from "hooks/useFetchArray";
 import { useEffect } from "react";
 import RightPanel from "./RightPanel";

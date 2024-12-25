@@ -1,0 +1,53 @@
+@use "../../../windows/utils/variables" as v;
+
+.form-template {
+   display: flex;
+   flex-flow: column nowrap;
+
+   text-align: left;
+
+   padding: 0 2rem;
+   max-width: 1000px;
+   width: 100%;
+
+   gap: 1.5rem;
+
+   .form-title {
+      font-size: xx-large;
+      font-weight: bold;
+      text-transform: capitalize;
+
+      margin-bottom: 3rem;
+   }
+   
+   .form-item {
+      display: flex;
+      flex-flow: column nowrap;
+
+      gap: .5rem;
+
+      .form-vertical-input {
+         display: flex;
+         flex-flow: column nowrap;
+
+         gap: .3rem;
+      }
+
+      .form-item-horizontal {
+         display: flex;
+         flex-flow: row nowrap;
+         align-items: center;
+
+         gap: .5rem;
+
+         .form-item-label {
+            text-transform: capitalize;
+         }
+      }
+      
+      .form-item-bottom-text {
+         font-size: small;
+         color: v.$color-text-dark;
+      }
+   }
+}
