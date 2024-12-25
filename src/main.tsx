@@ -14,13 +14,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 	<PrimeReactProvider>
 		<Provider store={store}>
 			<SectionProvider>
-				<DownloadProvider>
-					<DataProvider>
+				<DataProvider>
+					<DownloadProvider>
 						<SettingsProvider>
 							<MainDesktop />
 						</SettingsProvider>
-					</DataProvider>
-				</DownloadProvider>
+					</DownloadProvider>
+				</DataProvider>
 			</SectionProvider>
 		</Provider>
 	</PrimeReactProvider>

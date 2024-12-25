@@ -1,5 +1,6 @@
 import { MediaSearchResult } from "@interfaces/SearchResults";
 import React, { useContext, useEffect } from "react";
+import { useDataContext } from "./data.context";
 
 interface DownloadContextProps {
 	loaded: boolean;
@@ -44,14 +45,19 @@ export const DownloadProvider = ({
 		React.useState<number>(0);
 	const [loaded, setLoaded] = React.useState<boolean>(false);
 
+	const { serverIP } = useDataContext();
+
 	const search = async () => {
 		setLoaded(false);
-		const searchResults = await window.electronAPI.searchVideos(
-			searchQuery,
-			20
-		);
-		setResults(searchResults);
-		setLoaded(true);
+
+		fetch(`https://${serverIP}/searchMedia/${searchQuery}`)
+			.then((response) => response.json())
+			.then((data) => {
+				setResults(data);
+				setLoaded(true);
+			})
+			.catch((_error) => setResults([]))
+			.finally(() => setLoaded(true));
 	};
 
 	useEffect(() => {
@@ -59,11 +65,14 @@ export const DownloadProvider = ({
 			setDownloadedPercentage(progress);
 		});
 
-		window.ipcRenderer.on("media-download-complete", async (_event, _fileName) => {
-			setDownloadingContent(false);
-			setDownloadedPercentage(0);
-			setShowWindow(false);
-		});
+		window.ipcRenderer.on(
+			"media-download-complete",
+			async (_event, _fileName) => {
+				setDownloadingContent(false);
+				setDownloadedPercentage(0);
+				setShowWindow(false);
+			}
+		);
 
 		window.ipcRenderer.on("media-download-error", (_event, _error) => {
 			setDownloadingContent(false);
