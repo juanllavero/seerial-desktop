@@ -19,7 +19,7 @@ import NoContent from "./utils/NoContent";
  * @returns The correct content based on the selected library and series.
  */
 function RightPanel() {
-	const { currentRightSection } = useSectionContext();
+	const { currentRightSection, setCurrentRightSection } = useSectionContext();
 
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.selectedLibrary
@@ -29,6 +29,10 @@ function RightPanel() {
 	);
 	const previousLibraryId = useRef<string | null>(null);
 	const previousSeriesId = useRef<string | null>(null);
+
+	useEffect(() => {
+		setCurrentRightSection(RightPanelSections.Home);
+	}, []);
 
 	// useEffect to reset scroll position when library or series changes
 	useEffect(() => {

@@ -36,7 +36,6 @@ function RightContent() {
 					{currentLeftSection !== LeftPanelSections.Settings ? (
 						<LibraryAndSlider />
 					) : null}
-
 					<RightPanel />
 				</>
 			)}
