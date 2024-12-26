@@ -82,18 +82,16 @@ function LibrariesList({
 				<HomeButton handleSelectLibrary={handleSelectLibrary} />
 				{libraries.map((library: LibraryData, index: number) => {
 					return (
-						!library.pinned && (
-							<LibraryButton
-								library={library}
-								index={index}
-								handleDragStart={handleDragStart}
-								handleDragEnd={handleDragEnd}
-								handleDragOver={handleDragOver}
-								dragable={true}
-								handleSelectLibrary={handleSelectLibrary}
-								cm={cm}
-							/>
-						)
+						<LibraryButton
+							library={library}
+							index={index}
+							handleDragStart={handleDragStart}
+							handleDragEnd={handleDragEnd}
+							handleDragOver={handleDragOver}
+							dragable={true}
+							handleSelectLibrary={handleSelectLibrary}
+							cm={cm}
+						/>
 					);
 				})}
 

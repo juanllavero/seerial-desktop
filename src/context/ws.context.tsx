@@ -1,6 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDataContext } from "./data.context";
 import { SeriesData } from "@interfaces/SeriesData";
+import { useDispatch } from "react-redux";
+import {
+	addEpisode,
+	addSeason,
+	addSeries,
+	updateSeason,
+	updateSeries,
+} from "@redux/slices/dataSlice";
 
 interface WebSocketsContextProps {
 	downloading: boolean;
@@ -24,6 +32,7 @@ export const WebSocketsProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
+	const dispatch = useDispatch();
 	const { serverIP } = useDataContext();
 	const [downloading, setDownloading] = React.useState<boolean>(false);
 	const [downloadPercentage, setDownloadPercentage] =
@@ -51,16 +60,32 @@ export const WebSocketsProvider = ({
 			// Los mensajes vienen como cadenas JSON
 			const message = JSON.parse(event.data);
 
-			// Verificar el tipo de mensaje (en este caso, DOWNLOAD_PROGRESS)
-			if (message.header === "DOWNLOAD_PROGRESS") {
-				// Actualizar la interfaz con el progreso
-				setDownloadPercentage(message.body);
-			} else if (message.header === "DOWNLOAD_ERROR") {
-				setDownloading(false);
-			} else if (message.header === "DOWNLOAD_COMPLETE") {
-				setDownloading(false);
-			} else if (message.header === "RECEIVE_SERIES") {
-				setSeriesReceived(message.body);
+         console.log(message);
+
+			// Check message type
+			switch (message.header) {
+				case "DOWNLOAD_PROGRESS":
+					// Actualizar la interfaz con el progreso
+					setDownloadPercentage(message.body);
+					break;
+				case "DOWNLOAD_ERROR":
+					setDownloading(false);
+					break;
+				case "DOWNLOAD_COMPLETE":
+					setDownloading(false);
+					break;
+				case "ADD_SERIES":
+					dispatch(addSeries(message.body));
+					break;
+				case "UPDATE_SERIES":
+					dispatch(updateSeries(message.body));
+					break;
+				case "ADD_SEASON":
+					dispatch(addSeason(message.body));
+					break;
+				case "ADD_EPISODE":
+					dispatch(addEpisode(message.body));
+					break;
 			}
 		};
 

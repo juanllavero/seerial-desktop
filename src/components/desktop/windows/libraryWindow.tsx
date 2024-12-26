@@ -1,9 +1,9 @@
 import { WindowSections } from "@data/enums/Sections";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuSection } from "redux/slices/menuSectionsSlice";
 import { RootState } from "redux/store";
-import { toggleLibraryEditWindow } from "redux/slices/dataSlice";
+import { addLibrary, toggleLibraryEditWindow } from "redux/slices/dataSlice";
 import { useTranslation } from "react-i18next";
 import { Library } from "@objects/Library";
 import {
@@ -11,7 +11,6 @@ import {
 	MusicIcon,
 	ShowsIcon,
 } from "@components/utils/IconLibrary";
-import Loading from "@components/utils/Loading";
 import FolderSelector from "./FolderSelector";
 import { toggleFolderSelectionMenu } from "@redux/slices/contextMenuSlice";
 import DialogBottom from "./utils/DialogBottom";
@@ -19,6 +18,8 @@ import DialogTemplate from "./utils/DialogTemplate";
 import DialogCenter from "./utils/DialogCenter";
 import DialogCenterLeftPanel from "./utils/DialogCenterLeftPanel";
 import DialogCenterContent from "./utils/DialogCenterContent";
+import { useSettingsContext } from "context/settings.context";
+import { useDataContext } from "context/data.context";
 
 function LibraryWindow() {
 	const dispatch = useDispatch();
@@ -30,14 +31,14 @@ function LibraryWindow() {
 	const [language, setLanguage] = useState<string>(i18n.language);
 	const [addLibraryMode, setAddLibraryMode] = useState<boolean>(true);
 
+	const { serverIP } = useDataContext();
+	const { getLanguageName } = useSettingsContext();
+
 	const menuSection = useSelector(
 		(state: RootState) => state.sectionState.menuSection
 	);
 	const libraryMenuOpen = useSelector(
 		(state: RootState) => state.data.libraryEditWindow
-	);
-	const folderSelectionMenuOpen = useSelector(
-		(state: RootState) => state.contextMenu.folderSelectionMenu
 	);
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.libraryForMenu
@@ -47,39 +48,13 @@ function LibraryWindow() {
 		? i18n.options.supportedLngs.filter((lng) => lng !== "cimode")
 		: [];
 
-	const getLanguageName = (lang: string) => {
-		try {
-			let langCode = lang.split("-")[0];
-			if (!langCode) {
-				langCode = lang;
-			}
-
-			const languageNames = new Intl.DisplayNames([langCode], {
-				type: "language",
-				languageDisplay: "standard",
-			});
-			const languageName = languageNames.of(lang);
-
-			if (languageName)
-				return languageName.charAt(0).toUpperCase() + languageName.slice(1);
-		} catch (error) {
-			console.error("Error retrieving language and country name:", error);
-			return lang;
-		}
-	};
-
 	const handleSelectFolder = async (newFolder: string) => {
-		// const result = await window.electronAPI.openFolderDialog();
-		// if (result.length > 0) {
-		// 	const newFolders = result.filter(
-		// 		(folder) => !folders.includes(folder)
-		// 	);
-		// 	if (newFolders.length > 0) {
-		// 		setFolders((prevFolders) => [...prevFolders, ...newFolders]);
-		// 	}
-		// }
-
-		setFolders((prevFolders) => [...prevFolders, newFolder]);
+		const newFolders = [...folders, newFolder].filter(
+			(folder) => !folders.includes(folder)
+		);
+		if (newFolders.length > 0) {
+			setFolders((prevFolders) => [...prevFolders, ...newFolders]);
+		}
 	};
 
 	const handleRemoveFolder = (folderToRemove: string) => {
@@ -101,23 +76,26 @@ function LibraryWindow() {
 			console.log("Error folder");
 		} else {
 			if (addLibraryMode) {
-				const newLibrary = new Library(
-					name,
-					language,
-					type,
-					0,
-					folders,
-					"Server",
-					"127.0.0.1",
-					false
-				); //FIX SERVER DATA
-				window.electronAPI.scanFiles(newLibrary.toLibraryData());
+				const newLibrary = new Library(name, language, type, 0, folders);
+
+				// Add library
+				fetch(`https://${serverIP}/addLibrary`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(newLibrary.toLibraryData()),
+				});
+
+				// Add library to view
+				dispatch(addLibrary(newLibrary));
 			} else if (selectedLibrary) {
 				selectedLibrary.name = name;
 				selectedLibrary.language = language;
 				selectedLibrary.folders = folders;
 
-				window.electronAPI.scanFiles(selectedLibrary);
+				// Scan library
+				fetch(`https://${serverIP}/scanLibrary/${selectedLibrary.id}`);
 			}
 		}
 
