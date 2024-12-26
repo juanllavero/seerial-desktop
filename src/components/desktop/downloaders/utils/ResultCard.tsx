@@ -3,6 +3,7 @@ import { ReactUtils } from "@data/utils/ReactUtils";
 import { MediaSearchResult } from "@interfaces/SearchResults";
 import { RootState } from "@redux/store";
 import { useDownloadContext } from "context/download.context";
+import { useWebSocketsContext } from "context/ws.context";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -10,12 +11,12 @@ function ResultCard({ result }: { result: MediaSearchResult }) {
 	const {
 		setSelectedUrl,
 		setPlayContent,
-		downloadVideo,
-		downloadAudio,
 		videoContent,
-		setDownloadingContent,
 	} = useDownloadContext();
-	const selectedSeason = useSelector((state: RootState) => state.data.selectedSeason);
+	const { downloadVideo, downloadAudio } = useWebSocketsContext();
+	const selectedSeason = useSelector(
+		(state: RootState) => state.data.selectedSeason
+	);
 
 	const handlePlayVideo = () => {
 		setSelectedUrl(result.url);
@@ -29,8 +30,6 @@ function ResultCard({ result }: { result: MediaSearchResult }) {
 
 		if (videoContent) downloadVideo(selectedSeason.id, result.url);
 		else downloadAudio(selectedSeason.id, result.url);
-
-		setDownloadingContent(true);
 	};
 
 	return (

@@ -9,17 +9,20 @@ import { SectionProvider } from "context/section.context";
 import { DownloadProvider } from "context/download.context";
 import { DataProvider } from "context/data.context";
 import { SettingsProvider } from "context/settings.context";
+import { WebSocketsProvider } from "context/ws.context";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<PrimeReactProvider>
 		<Provider store={store}>
 			<SectionProvider>
 				<DataProvider>
-					<DownloadProvider>
-						<SettingsProvider>
-							<MainDesktop />
-						</SettingsProvider>
-					</DownloadProvider>
+					<WebSocketsProvider>
+						<DownloadProvider>
+							<SettingsProvider>
+								<MainDesktop />
+							</SettingsProvider>
+						</DownloadProvider>
+					</WebSocketsProvider>
 				</DataProvider>
 			</SectionProvider>
 		</Provider>

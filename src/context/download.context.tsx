@@ -12,16 +12,10 @@ interface DownloadContextProps {
 	videoContent: boolean;
 	selectedUrl: string;
 	playContent: boolean;
-	downloadVideo: (elementId: string, url: string) => void;
-	downloadAudio: (elementId: string, url: string) => void;
 	setSearchQuery: (query: string) => void;
 	setVideoContent: (downloadVideos: boolean) => void;
 	setSelectedUrl: (url: string) => void;
 	setPlayContent: (playContent: boolean) => void;
-	downloadingContent: boolean;
-	setDownloadingContent: (downloadingContent: boolean) => void;
-	downloadedPercentage: number;
-	setDownloadedPercentage: (downloadedPercentage: number) => void;
 }
 
 export const DownloadContext = React.createContext<
@@ -39,10 +33,6 @@ export const DownloadProvider = ({
 	const [videoContent, setVideoContent] = React.useState<boolean>(false);
 	const [selectedUrl, setSelectedUrl] = React.useState<string>("");
 	const [playContent, setPlayContent] = React.useState<boolean>(false);
-	const [downloadingContent, setDownloadingContent] =
-		React.useState<boolean>(false);
-	const [downloadedPercentage, setDownloadedPercentage] =
-		React.useState<number>(0);
 	const [loaded, setLoaded] = React.useState<boolean>(false);
 
 	const { serverIP } = useDataContext();
@@ -61,47 +51,8 @@ export const DownloadProvider = ({
 	};
 
 	useEffect(() => {
-		window.ipcRenderer.on("download-progress", (_event, progress) => {
-			setDownloadedPercentage(progress);
-		});
-
-		window.ipcRenderer.on(
-			"media-download-complete",
-			async (_event, _fileName) => {
-				setDownloadingContent(false);
-				setDownloadedPercentage(0);
-				setShowWindow(false);
-			}
-		);
-
-		window.ipcRenderer.on("media-download-error", (_event, _error) => {
-			setDownloadingContent(false);
-			setDownloadedPercentage(0);
-			setShowWindow(false);
-		});
-	}, []);
-
-	useEffect(() => {
 		if (searchQuery) search();
 	}, [searchQuery]);
-
-	const downloadVideo = async (elementId: string, url: string) => {
-		window.electronAPI.downloadMedia({
-			url: url,
-			downloadFolder: "resources/video/",
-			fileName: elementId,
-			isVideo: true,
-		});
-	};
-
-	const downloadAudio = async (elementId: string, url: string) => {
-		window.electronAPI.downloadMedia({
-			url: url,
-			downloadFolder: "resources/music/",
-			fileName: elementId,
-			isVideo: false,
-		});
-	};
 
 	return (
 		<DownloadContext.Provider
@@ -119,12 +70,6 @@ export const DownloadProvider = ({
 				setSelectedUrl,
 				playContent,
 				setPlayContent,
-				downloadVideo,
-				downloadAudio,
-				downloadingContent,
-				setDownloadingContent,
-				downloadedPercentage,
-				setDownloadedPercentage,
 			}}
 		>
 			{children}
