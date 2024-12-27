@@ -1,8 +1,8 @@
 import "./SettingsButton.scss"
 
-function SettingsButton({text, action} : {text: string; action: () => void}) {
+function SettingsButton({text, action, active} : {text: string; action: () => void, active: boolean}) {
   return (
-    <button className="settings-btn" title={text} onClick={action}>
+    <button className={`settings-btn ${active ? "settings-btn-active" : ""}`} title={text} onClick={action}>
       {text}
     </button>
   )

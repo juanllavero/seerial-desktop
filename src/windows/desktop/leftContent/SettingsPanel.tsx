@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 function SettingsPanel() {
 	const { t } = useTranslation();
-	const { setCurrentSettingsSection } = useSectionContext();
+	const { currentSettingsSection, setCurrentSettingsSection } = useSectionContext();
 
 	return (
 		<div className="left-container scroll">
@@ -16,18 +16,21 @@ function SettingsPanel() {
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ClientGeneral)
 				}
+				active={currentSettingsSection === SettingsSections.ClientGeneral}
 			/>
 			<SettingsButton
 				text={t('quality')}
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ClientQuality)
 				}
+				active={currentSettingsSection === SettingsSections.ClientQuality}
 			/>
 			<SettingsButton
 				text={t('player')}
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ClientPlayer)
 				}
+				active={currentSettingsSection === SettingsSections.ClientPlayer}
 			/>
 
 			<span className="settings-section-title">{t("server")}</span>
@@ -36,24 +39,28 @@ function SettingsPanel() {
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ServerGeneral)
 				}
+				active={currentSettingsSection === SettingsSections.ServerGeneral}
 			/>
 			<SettingsButton
 				text={t('languages')}
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ServerLanguages)
 				}
+				active={currentSettingsSection === SettingsSections.ServerLanguages}
 			/>
 			<SettingsButton
 				text={t('transcode')}
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ServerTranscode)
 				}
+				active={currentSettingsSection === SettingsSections.ServerTranscode}
 			/>
 			<SettingsButton
 				text={t('libraries')}
 				action={() =>
 					setCurrentSettingsSection(SettingsSections.ServerLibrary)
 				}
+				active={currentSettingsSection === SettingsSections.ServerLibrary}
 			/>
 		</div>
 	);
