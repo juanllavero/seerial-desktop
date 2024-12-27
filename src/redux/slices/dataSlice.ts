@@ -143,6 +143,9 @@ const dataSlice = createSlice({
 			state,
 			action: PayloadAction<{ libraryId: string; series: SeriesData }>
 		) => {
+
+			console.log(action.payload)
+
 			const library = state.libraries.find(
 				(library) => library.id === action.payload.libraryId
 			);

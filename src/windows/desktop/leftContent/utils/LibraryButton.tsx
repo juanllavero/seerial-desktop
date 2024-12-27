@@ -47,11 +47,10 @@ function LibraryButton({
 
 	return (
 		<button
-			key={library.id}
 			className={`libraries-button ${
 				library === selectedLibrary ? "selected" : ""
 			}`}
-			title={library.name}
+			title={library && library.name}
 			draggable={dragable}
 			onDragStart={
 				dragable && handleDragStart
@@ -67,9 +66,9 @@ function LibraryButton({
 					: undefined
 			}
 		>
-			{library.type === "Shows" ? (
+			{library && library.type === "Shows" ? (
 				<ShowsIcon onClick={() => handleSelectLibrary(library)} />
-			) : library.type === "Movies" ? (
+			) : library && library.type === "Movies" ? (
 				<MoviesIcon onClick={() => handleSelectLibrary(library)} />
 			) : (
 				<MusicIcon onClick={() => handleSelectLibrary(library)} />
@@ -78,12 +77,12 @@ function LibraryButton({
 				className="library-name"
 				onClick={() => handleSelectLibrary(library)}
 			>
-				{library.name}
+				{library && library.name}
 			</span>
 
 			<div>
 				<a
-					id={library.id + "btn"}
+					id={library ? library.id + "btn" : index + "btn"}
 					className={`svg-button-desktop-transparent select ${
 						libraryMenuOpen && library == libraryForMenu
 							? " active-btn"

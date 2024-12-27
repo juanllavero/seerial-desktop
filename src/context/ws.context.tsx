@@ -4,8 +4,10 @@ import { SeriesData } from "@interfaces/SeriesData";
 import { useDispatch } from "react-redux";
 import {
 	addEpisode,
+	addLibrary,
 	addSeason,
 	addSeries,
+	updateLibrary,
 	updateSeason,
 	updateSeries,
 } from "@redux/slices/dataSlice";
@@ -73,6 +75,12 @@ export const WebSocketsProvider = ({
 					break;
 				case "DOWNLOAD_COMPLETE":
 					setDownloading(false);
+					break;
+				case "ADD_LIBRARY":
+					dispatch(addLibrary(message.body.library));
+					break;
+				case "UPDATE_LIBRARY":
+					dispatch(updateLibrary(message.body.library));
 					break;
 				case "ADD_SERIES":
 					dispatch(addSeries(message.body));

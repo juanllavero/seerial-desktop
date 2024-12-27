@@ -8,8 +8,6 @@ import { useSectionContext } from "context/section.context";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import Card from "../Card";
-import { LeftArrowIcon, RightArrowIcon } from "@components/utils/IconLibrary";
 import "./HomeSection.scss";
 import Loading from "@components/utils/Loading";
 import ContentCard from "./ContentCard";
@@ -29,12 +27,6 @@ function HomeSection() {
 		(state: RootState) => state.seriesImage.width
 	);
 
-	// Control horizontal scroll in home view
-	const continueWatchingContainer = useRef<HTMLDivElement>(null);
-	const myListContainer = useRef<HTMLDivElement>(null);
-	const [canScrollCW, setCanScrollCW] = useState(false);
-	const [canScrollML, setCanScrollML] = useState(false);
-
 	const [currentlyWatchingShows, setCurrentlyWatchingShows] = useState<
 		{
 			library: LibraryData;
@@ -52,6 +44,8 @@ function HomeSection() {
 
 		setCurrentlyWatchingShows([]);
 		for (const library of libraries) {
+			if (!library || !library.series) continue;
+			
 			for (const show of library.series) {
 				if (
 					!show.seasons ||
@@ -106,55 +100,6 @@ function HomeSection() {
 			}
 		}
 	}, [libraries, selectedLibrary]);
-
-	// Function to check if horizontal containers need scroll
-	const checkScroll = () => {
-		let container = continueWatchingContainer.current;
-		if (container) {
-			setCanScrollCW(container.scrollWidth > container.clientWidth);
-		}
-
-		container = myListContainer.current;
-		if (container) {
-			setCanScrollML(container.scrollWidth > container.clientWidth);
-		}
-	};
-
-	useEffect(() => {
-		checkScroll();
-		window.addEventListener("resize", checkScroll);
-		return () => window.removeEventListener("resize", checkScroll);
-	}, []);
-
-	useEffect(() => {
-		checkScroll();
-	}, [currentlyWatchingShows, seriesImageWidth]);
-
-	//#region HORIZONTAL SCROLL WITH BUTTONS
-	const handleScroll = (
-		direction: "left" | "right",
-		continueWatching: boolean
-	) => {
-		const scrollContainer = continueWatching
-			? document.getElementById("continueWatchingScroll")
-			: document.getElementById("myListScroll");
-
-		if (scrollContainer) {
-			const scrollWidth =
-				scrollContainer.firstElementChild?.clientWidth || 0;
-			const containerWidth = scrollContainer.clientWidth;
-			const chaptersVisible = Math.floor(containerWidth / scrollWidth);
-
-			const scrollAmount = chaptersVisible * scrollWidth;
-
-			if (direction === "left") {
-				scrollContainer.scrollLeft -= scrollAmount;
-			} else if (direction === "right") {
-				scrollContainer.scrollLeft += scrollAmount;
-			}
-		}
-	};
-	//#endregion
 
 	return (
 		<Suspense fallback={<Loading />}>

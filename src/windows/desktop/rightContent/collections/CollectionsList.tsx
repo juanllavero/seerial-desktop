@@ -63,7 +63,7 @@ function CollectionsList() {
 
 	return (
 		<div className="collection-container scroll" id="scroll">
-			{selectedLibrary?.series.map((show: SeriesData, index: number) => (
+			{selectedLibrary && selectedLibrary.series && selectedLibrary.series.map((show: SeriesData, index: number) => (
 				<div
 					className="card"
 					key={show.id}

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { loadImage, removeImage } from "../../redux/slices/imageLoadedSlice";
 import Image from "@components/image/Image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export function MainBackgroundImage() {
 	const dispatch = useDispatch();
@@ -48,4 +48,4 @@ export function MainBackgroundImage() {
 	}
 }
 
-export default MainBackgroundImage;
+export default React.memo(MainBackgroundImage);

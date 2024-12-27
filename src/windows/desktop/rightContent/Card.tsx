@@ -81,7 +81,10 @@ function Card(props: CardProps): JSX.Element {
 	const countUnWatchedEpisodes = () => {
 		let unWatchedEpisodes = 0;
 
+		if (!show.seasons) return;
+
 		for (const season of show.seasons) {
+			if (!season.episodes) continue;
 			for (const episode of season.episodes) {
 				if (!episode.watched) unWatchedEpisodes += 1;
 			}

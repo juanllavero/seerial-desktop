@@ -86,9 +86,6 @@ function LibraryWindow() {
 					},
 					body: JSON.stringify(newLibrary.toLibraryData()),
 				});
-
-				// Add library to view
-				dispatch(addLibrary(newLibrary));
 			} else if (selectedLibrary) {
 				selectedLibrary.name = name;
 				selectedLibrary.language = language;

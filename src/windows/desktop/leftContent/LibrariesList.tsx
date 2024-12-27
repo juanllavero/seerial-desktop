@@ -83,6 +83,7 @@ function LibrariesList({
 				{libraries.map((library: LibraryData, index: number) => {
 					return (
 						<LibraryButton
+							key={index}
 							library={library}
 							index={index}
 							handleDragStart={handleDragStart}
