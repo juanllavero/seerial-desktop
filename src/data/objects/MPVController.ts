@@ -26,6 +26,10 @@ export class MPVController {
         ? path.join(__dirname, "../src/mpv/mpv.exe")
         : "mpv";
 
+    MPVController.ipcSocketPath = os.platform() === "win32"
+    ? "--input-ipc-server=\\\\.\\pipe\\mpv-pipe" // Windows
+    : "--input-ipc-server=/tmp/mpv-socket";
+
     // Obtiene el identificador nativo de la ventana
     const nativeHandle = this.window.getNativeWindowHandle();
 

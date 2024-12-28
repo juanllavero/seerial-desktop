@@ -30,3 +30,4 @@ keys.properties
 resources
 *.exe
 *.mkv
+\\.\pipe\mpv-pipe
