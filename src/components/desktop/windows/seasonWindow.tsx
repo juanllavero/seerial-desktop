@@ -23,18 +23,15 @@ import DialogTextArea from "./utils/DialogTextArea";
 import DialogSectionButton from "./utils/DialogSectionButton";
 import DialogFooter from "./utils/DialogFooter";
 import DialogDownloading from "./utils/DialogDownloading";
+import { useWebSocketsContext } from "context/ws.context";
 
 function SeasonWindow() {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
-	const {
-		videoContent,
-		setVideoContent,
-		showWindow,
-		setShowWindow,
-		downloadingContent,
-		setDownloadingContent,
-	} = useDownloadContext();
+	const { videoContent, setVideoContent, showWindow, setShowWindow } =
+		useDownloadContext();
+
+	const { downloading, setDownloading } = useWebSocketsContext();
 
 	const menuSection = useSelector(
 		(state: RootState) => state.sectionState.menuSection
@@ -281,16 +278,16 @@ function SeasonWindow() {
 					const originalPath = file.path;
 					const destPath = "resources/img/DownloadCache/" + file.name;
 
-					setDownloadingContent(true);
+					setDownloading(true);
 					window.ipcRenderer
 						.invoke("copy-image-file", originalPath, destPath)
 						.then(() => {
 							setImageDownloaded(true);
-							setDownloadingContent(false);
+							setDownloading(false);
 							setSelectedBackground(destPath);
 						})
 						.catch((_e) => {
-							setDownloadingContent(false);
+							setDownloading(false);
 						});
 				};
 				reader.readAsDataURL(file);
@@ -300,7 +297,7 @@ function SeasonWindow() {
 	};
 
 	const handleSavingChanges = async () => {
-		setDownloadingContent(true);
+		setDownloading(true);
 
 		if (season) {
 			if (library?.type !== "Music") {
@@ -388,7 +385,7 @@ function SeasonWindow() {
 			);
 		}
 
-		setDownloadingContent(false);
+		setDownloading(false);
 		dispatch(toggleSeasonWindow());
 	};
 
@@ -401,13 +398,13 @@ function SeasonWindow() {
 				<div
 					className="dialog-background"
 					onClick={() => {
-						if (!downloadingContent) {
+						if (!downloading) {
 							dispatch(toggleSeasonWindow());
 						}
 					}}
 				></div>
 				<div className="dialog-box">
-					<DialogDownloading downloadingContent={downloadingContent} />
+					<DialogDownloading downloadingContent={downloading} />
 					<DialogHeader
 						title={
 							t("editButton") +
@@ -753,7 +750,7 @@ function SeasonWindow() {
 						</div>
 					</section>
 					<DialogFooter
-						downloadingContent={downloadingContent}
+						downloadingContent={downloading}
 						handleSavingChanges={handleSavingChanges}
 						action={() => dispatch(toggleSeasonWindow())}
 					/>

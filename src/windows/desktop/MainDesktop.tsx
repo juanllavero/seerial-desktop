@@ -38,6 +38,7 @@ import ConfigManager from "@data/utils/Configuration";
 import { LeftPanelSections } from "@data/enums/Sections";
 import { useSectionContext } from "context/section.context";
 import SettingsRightPanel from "./rightContent/SettingsRightPanel";
+import VideoPlayer from "./VideoPlayer";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
@@ -186,6 +187,8 @@ function MainDesktop() {
 			<SeasonWindow />
 			<EpisodeWindow />
 			<AddServer />
+
+			<VideoPlayer source="https://seerial.sirjohn.es/video?path=F:\\UHD\\Blade Runner Collection\\Blade Runner 2049 (2017)\\Blade Runner 2049.mkv"/>
 
 			<div
 				className={`gradient-background ${gradientLoaded ? "fade-in" : ""}`}
