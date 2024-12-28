@@ -54,6 +54,11 @@ export class MPVController {
 			`https://seerial.sirjohn.es/video?path=${videoPath}`, // Ruta de tu video
 		];
 
+    // Force OpenGL on MacOS
+    //if (os.platform() === "darwin") {
+    //  args.push("--metal");
+    //}
+
 		// Spawn del proceso MPV
 		this.mpvProcess = spawn(mpvPath, args);
 

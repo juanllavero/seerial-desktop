@@ -22,6 +22,7 @@ import {
 	StopIcon,
 } from "@components/utils/IconLibrary";
 import "./MusicPlayer.scss";
+import { useDataContext } from "context/data.context";
 
 function MusicPlayer() {
 	const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function MusicPlayer() {
 	const currentSong = useSelector(
 		(state: RootState) => state.musicPlayer.currentSong
 	);
+	const { serverIP } = useDataContext();
 	const paused = useSelector((state: RootState) => state.musicPlayer.paused);
 	const [sliderValue, setSliderValue] = useState<number>(0);
 	const [hidePlayer, setHidePlayer] = useState<boolean>(false);
@@ -157,7 +159,7 @@ function MusicPlayer() {
 			{songsList !== null && currentSong && currentSong !== -1 ? (
 				<ReactHowler
 					ref={howlerRef}
-					src={songsList[currentSong].videoSrc}
+					src={`https://${serverIP}/audio?path=${songsList[currentSong].videoSrc}`}
 					playing={!paused}
 					onLoad={handleLoad}
 					volume={volume}
