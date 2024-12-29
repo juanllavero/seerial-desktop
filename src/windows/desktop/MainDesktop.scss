@@ -566,8 +566,8 @@ html, body {
         }
 
         .dialog-images-scroll {
-          display: flex;
-          flex-flow: row wrap;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
 
           .dialog-image-btn {
             border: 3px solid transparent;
@@ -578,6 +578,11 @@ html, body {
             display: flex;
             justify-content: flex-end;
             cursor: pointer;
+
+            img {
+              width: 100%;
+              height: auto;
+            }
 
             .triangle-tick {
               display: block;

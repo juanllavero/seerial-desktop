@@ -3,7 +3,6 @@ import React from "react";
 
 function ImageCard({
 	image,
-	imageWidth,
 	index,
 	selectImage,
 	selectedImage,
@@ -11,7 +10,6 @@ function ImageCard({
 	isUrl,
 }: {
 	image: string;
-	imageWidth: number;
 	index: number;
 	selectImage: (image: string | undefined) => void;
 	selectedImage: string | undefined;
@@ -32,7 +30,6 @@ function ImageCard({
 			<img
 				src={imagePath}
 				alt={`img-${index}`}
-				style={{ width: imageWidth }}
 			/>
 			{(isUrl && image === selectedImage) ||
 			image.split("\\").pop() === selectedImage ? (

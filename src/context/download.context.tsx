@@ -40,7 +40,7 @@ export const DownloadProvider = ({
 	const search = async () => {
 		setLoaded(false);
 
-		fetch(`https://${serverIP}/searchMedia/${searchQuery}`)
+		fetch(`https://${serverIP}/media/search?query=${searchQuery}`)
 			.then((response) => response.json())
 			.then((data) => {
 				setResults(data);

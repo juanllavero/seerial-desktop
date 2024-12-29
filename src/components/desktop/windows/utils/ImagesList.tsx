@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ImageCard from "./ImageCard";
-import { useDownloadContext } from "context/download.context";
+import { useWebSocketsContext } from "context/ws.context";
+import { useDataContext } from "context/data.context";
 
 function ImagesList({
 	images,
@@ -23,23 +24,34 @@ function ImagesList({
 	setImageDownloaded: (imageDownloaded: boolean) => void;
 }) {
 	const { t } = useTranslation();
-	const { setDownloadingContent } = useDownloadContext();
+	const { serverIP } = useDataContext();
+	const { setDownloading } = useWebSocketsContext();
 
 	const [pasteUrl, setPasteUrl] = useState<boolean>(false);
 	const [imageUrl, setImageUrl] = useState<string>("");
 
 	const handleDownload = () => {
 		setPasteUrl(false);
-		setDownloadingContent(true);
-		window.ipcRenderer
-			.invoke("download-image-url", imageUrl, downloadPath)
-			.then(() => {
+		setDownloading(true);
+
+		fetch(`https://${serverIP}/downloadImage`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				url: imageUrl,
+				downloadFolder: downloadPath,
+				fileName: imageUrl.split("/").pop(),
+			}),
+		})
+			.then((response) => response.json())
+			.finally(() => {
 				setImageDownloaded(true);
-				setDownloadingContent(false);
-			})
-			.catch((_e) => {
-				setDownloadingContent(false);
+				setDownloading(false);
 			});
+
+		setImagesUrls(imagesUrls.filter((url) => url !== imageUrl));
 	};
 
 	// Preprocess the names of the images in `images` and store them in a Set
@@ -48,10 +60,12 @@ function ImagesList({
 	);
 
 	// Filter the URLs whose name is not in the Set
-	const filteredImagesUrls = imagesUrls && imagesUrls.filter((imageUrl) => {
-		const imageNameFromUrl = imageUrl.split("/").pop()?.toLowerCase();
-		return imageNameFromUrl && !imageNamesSet.has(imageNameFromUrl);
-	});
+	const filteredImagesUrls =
+		imagesUrls &&
+		imagesUrls.filter((imageUrl) => {
+			const imageNameFromUrl = imageUrl.split("/").pop()?.toLowerCase();
+			return imageNameFromUrl && !imageNamesSet.has(imageNameFromUrl);
+		});
 
 	const handleImageLoad = () => {
 		const input = document.createElement("input");
@@ -60,24 +74,34 @@ function ImagesList({
 		input.onchange = () => {
 			const file = input.files?.[0];
 			if (file) {
-				const reader = new FileReader();
-				reader.onload = async () => {
-					const originalPath = file.path;
-					const destPath = downloadPath + file.name;
+				const formData = new FormData();
+				formData.append("image", file);
+				formData.append("destPath", downloadPath);
 
-					setDownloadingContent(true);
-					window.ipcRenderer
-						.invoke("copy-image-file", originalPath, destPath)
-						.then(() => {
-							setImageDownloaded(true);
-							setDownloadingContent(false);
-						})
-						.catch((_e) => {
-							setDownloadingContent(false);
-						});
-				};
-				reader.readAsDataURL(file);
-			}
+				console.log(downloadPath);
+		
+				// Muestra un estado de descarga mientras se procesa
+				setDownloading(true);
+		
+				// Envía la imagen al servidor
+				fetch(`https://${serverIP}/uploadImage`, {
+				  method: "POST",
+				  body: formData,
+				})
+				  .then((response) => {
+					 if (response.ok) {
+						setImageDownloaded(true);
+					 } else {
+						console.error("Error uploading image to server:", response.statusText);
+					 }
+				  })
+				  .catch((error) => {
+					 console.error("Error in fetch request:", error);
+				  })
+				  .finally(() => {
+					 setDownloading(false);
+				  });
+			 }
 		};
 		input.click();
 	};
@@ -130,7 +154,6 @@ function ImagesList({
 						<ImageCard
 							key={image}
 							image={image}
-							imageWidth={imageWidth}
 							index={index}
 							selectImage={selectImage}
 							selectedImage={selectedImage}
@@ -143,7 +166,6 @@ function ImagesList({
 						<ImageCard
 							key={image}
 							image={image}
-							imageWidth={imageWidth}
 							index={index}
 							selectImage={selectImage}
 							selectedImage={selectedImage}
