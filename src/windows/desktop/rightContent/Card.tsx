@@ -55,8 +55,6 @@ function Card(props: CardProps): JSX.Element {
 		(state: RootState) => state.seriesImage.height
 	);
 
-	const series = useSelector((state: RootState) => state.data.selectedSeries);
-
 	const cm = useRef<ContextMenu | null>(null);
 
 	const handleSeriesSelection = (series: SeriesData) => {
@@ -94,7 +92,7 @@ function Card(props: CardProps): JSX.Element {
 	};
 
 	return (
-		<div className="card" style={{ maxWidth: `${seriesImageWidth}px` }}>
+		<div className="card">
 			<div
 				className="top-section"
 				onAuxClick={(e) => {
@@ -156,8 +154,7 @@ function Card(props: CardProps): JSX.Element {
 									: "/img/fileNotFound.jpg"
 							}
 							alt="Poster"
-							width={seriesImageWidth}
-							height={seriesImageHeight}
+							style={{ aspectRatio: "2/3" }}
 							errorSrc="/img/fileNotFound.jpg"
 							isRelative={true}
 						/>
@@ -171,8 +168,7 @@ function Card(props: CardProps): JSX.Element {
 									: "/img/songDefault.png"
 							}
 							alt="Poster"
-							width={seriesImageWidth}
-							height={seriesImageWidth}
+							style={{ aspectRatio: "1/1" }}
 							errorSrc="/img/songDefault.png"
 							isRelative={true}
 						/>

@@ -58,7 +58,7 @@ function EpisodeCard({ episode }: EpisodeCardProps) {
 	};
 
 	return (
-		<div className="card" style={{ maxWidth: `${episodeImageWidth}px` }}>
+		<div className="card">
 			<div className="top-section">
 				{episode.watched && (
 					<div className="watched">
@@ -115,9 +115,10 @@ function EpisodeCard({ episode }: EpisodeCardProps) {
 				<div className="image-section">
 					<Image
 						src={episode.imgSrc}
-						width={episodeImageWidth}
-						height={episodeImageHeight}
 						alt="Video Thumbnail"
+						style={{
+							aspectRatio: 16/9,
+						}}
 						errorSrc="/img/Default_video_thumbnail.jpg"
 						isRelative={true}
 					/>

@@ -1,8 +1,57 @@
 .music-cards {
-	display: flex;
-	flex-flow: row wrap;
-	margin-top: 1em;
-	padding-bottom: 5em;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	margin: 2rem 0 0 0;
+	padding: 0 4rem 4rem 0;
 
    gap: .8em;
+}
+
+@media screen and (max-aspect-ratio: 2/3) {
+	/* Para 3:3 o más cuadrado */
+	.music-cards {
+		grid-template-columns: repeat(1, 1fr);
+	}
+}
+
+@media screen and (min-aspect-ratio: 2/3) and (max-aspect-ratio: 3/3) {
+	/* Para 3:3 o más cuadrado */
+	.music-cards {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (min-aspect-ratio: 3/3) and (max-aspect-ratio: 4/3) {
+	/* Para 4:3 o más cuadrado */
+	.music-cards {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+@media screen and (min-aspect-ratio: 4/3) and (max-aspect-ratio: 5/3) {
+	/* Para relaciones de aspecto mayores a 4:3 y menores a 5:3 */
+	.music-cards {
+		grid-template-columns: repeat(5, 1fr);
+	}
+}
+
+@media screen and (min-aspect-ratio: 5/3) and (max-aspect-ratio: 21/9) {
+	/* Para relaciones de aspecto mayores a 5:3 y menores a 21:9 */
+	.music-cards {
+		grid-template-columns: repeat(7, 1fr);
+	}
+}
+
+@media screen and (min-aspect-ratio: 21/9) and (max-aspect-ratio: 32/9) {
+	/* Para relaciones de aspecto mayores a 21:9 y menores a 32:9 */
+	.music-cards {
+		grid-template-columns: repeat(8, 1fr);
+	}
+}
+
+@media screen and (min-aspect-ratio: 32/9) {
+	/* Para pantallas ultrawide (32:9 o más) */
+	.music-cards {
+		grid-template-columns: repeat(9, 1fr);
+	}
 }

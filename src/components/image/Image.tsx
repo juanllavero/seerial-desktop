@@ -8,6 +8,7 @@ interface ImageProps {
 	alt: string;
 	width?: number;
 	height?: number;
+	style?: React.CSSProperties;
 	errorSrc: string;
 	isRelative: boolean;
 	className?: string;
@@ -20,6 +21,7 @@ function Image({
 	alt,
 	width,
 	height,
+	style,
 	errorSrc,
 	isRelative,
 	className,
@@ -38,8 +40,9 @@ function Image({
 					}
 					alt={alt}
 					style={{
-						width: `${width}px`,
-						height: `${height}px`,
+						width: width ? `${width}px` : undefined,
+						height: height ? `${height}px` : undefined,
+						...style,
 					}}
 					onError={(e: any) => {
 						e.target.onerror = null; // To avoid infinite loop
