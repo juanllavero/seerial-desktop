@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { EpisodeData } from "@interfaces/EpisodeData";
-import { LibraryData } from "@interfaces/LibraryData";
 import { SeriesData } from "@interfaces/SeriesData";
 import Card from "../Card";
 import "./MusicCards.scss";
+import { RootState } from "@redux/store";
+import { useSelector } from "react-redux";
 
-interface MusicViewProps {
-	selectedLibrary: LibraryData;
-}
-
-const MusicCards: React.FC<MusicViewProps> = ({ selectedLibrary }) => {
+function MusicCards() {
+	const selectedLibrary = useSelector(
+		(state: RootState) => state.data.selectedLibrary
+	);
 	const [selectionMode, setSelectionMode] = useState<boolean>(false);
 	const [selectedElements, setSelectedElements] = useState<EpisodeData[]>([]);
 
@@ -27,12 +27,19 @@ const MusicCards: React.FC<MusicViewProps> = ({ selectedLibrary }) => {
 				</div>
 			)}
 			<div className="music-cards scroll" id="scroll">
-				{selectedLibrary.series && selectedLibrary.series.map((collection: SeriesData) => (
-					<Card key={collection.id} library={selectedLibrary} show={collection} type="music" />
-				))}
+				{selectedLibrary &&
+					selectedLibrary.series &&
+					selectedLibrary.series.map((collection: SeriesData) => (
+						<Card
+							key={collection.id}
+							library={selectedLibrary}
+							show={collection}
+							type="music"
+						/>
+					))}
 			</div>
 		</>
 	);
-};
+}
 
 export default MusicCards;

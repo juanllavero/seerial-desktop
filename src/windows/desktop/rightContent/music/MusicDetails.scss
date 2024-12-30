@@ -4,38 +4,38 @@
 	display: flex;
 	flex-flow: column nowrap;
 
-   margin-top: 10em;
-   margin-left: 4em;
+	margin-top: 10em;
+	margin-left: 4em;
 
 	.info-container {
 		display: flex;
 		flex-flow: row nowrap;
-      text-align: left;
+		text-align: left;
 
-      gap: 1.5em;
+		gap: 1.5em;
 
 		.poster-image img {
 			width: 250px;
 			height: 250px;
 		}
 
-      .season-info {
-         display: flex;
-         flex-flow: column nowrap;
+		.season-info {
+			display: flex;
+			flex-flow: column nowrap;
 
-         gap: .2em;
-      }
+			gap: 0.2em;
+		}
 
-      .btns-container {
-         display: flex;
-         flex-flow: row nowrap;
-         
-         margin-top: 2em;
-      }
+		.btns-container {
+			display: flex;
+			flex-flow: row nowrap;
+
+			margin-top: 2em;
+		}
 
 		#seriesTitle {
 			font-size: v.$font-xx-large;
-         cursor: default;
+			cursor: default;
 		}
 
 		a {
@@ -78,6 +78,8 @@
 		display: flex;
 		flex-flow: column nowrap;
 
+		gap: 1rem;
+
 		.disc-text-title {
 			font-size: larger;
 			font-weight: bold;
@@ -86,11 +88,10 @@
 		}
 
 		.music-player-item {
-			margin-bottom: 1em;
 			margin-right: 2em;
 			width: 100%;
 			max-width: 60em;
-			height: 2em;
+			height: 2rem;
 			flex-flow: row nowrap;
 
 			.music-player-item-left {
@@ -99,19 +100,37 @@
 				align-items: center;
 
 				.song-image-container {
-					width: 2em;
+					width: 2rem;
 					justify-content: center;
 
 					.song-btn-overlay {
+						top: 0;
+						display: none;
 						width: 33px;
 						height: 33px;
-						background-color: #000000e8;
-						border-radius: 15px;
+						background-color: transparent;
+						border-radius: 5px;
+						border: none;
+						cursor: pointer;
 
 						svg {
-							width: 24px;
-							height: 24px;
+							width: 1.5rem;
+							height: 1.5rem;
 						}
+					}
+
+					.number {
+						display: block;
+					}
+				}
+
+				&:hover {
+					.song-btn-overlay {
+						display: block;
+					}
+
+					.number {
+						display: none;
 					}
 				}
 

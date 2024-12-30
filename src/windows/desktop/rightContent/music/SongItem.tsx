@@ -5,6 +5,7 @@ import {
 	setSongs,
 	setCurrentSong,
 	toggleMusicPause,
+	setCurrentAlbum,
 } from "@redux/slices/musicPlayerSlice";
 import { RootState } from "@redux/store";
 import React from "react";
@@ -27,18 +28,22 @@ function SongItem({ song, index }: { song: EpisodeData; index: number }) {
 			<div className="music-player-item-left song-row">
 				<div className="song-image-container">
 					<span className="number">{song.episodeNumber}</span>
-					<div className="song-btn-overlay">
-						<button
-							onClick={() => {
-								dispatch(setSongs(selectedAlbum.episodes));
-								dispatch(setCurrentSong(index));
+					<button
+						className="song-btn-overlay"
+						onClick={() => {
+							dispatch(setSongs(selectedAlbum.episodes));
+							dispatch(
+								setCurrentAlbum({
+									album: selectedAlbum,
+									songIndex: index,
+								})
+							);
 
-								if (musicPaused) dispatch(toggleMusicPause());
-							}}
-						>
-							<PlayIcon />
-						</button>
-					</div>
+							if (musicPaused) dispatch(toggleMusicPause());
+						}}
+					>
+						<PlayIcon />
+					</button>
 				</div>
 				<div className="music-player-item-text">
 					<span id="music-player-item-title">{song.name}</span>

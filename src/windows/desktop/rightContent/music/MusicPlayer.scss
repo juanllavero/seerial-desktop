@@ -24,11 +24,11 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width: 60%;
+			min-width: 60%;
 			transition: width 0.3s;
 
 			img {
-				border-radius: 15px;
+				border-radius: 10px;
 				height: auto;
 				max-width: 90%;
 				max-height: 60%;
@@ -54,7 +54,7 @@
 
 		.right-panel {
 			width: 40%;
-         height: 100%;
+			height: 100%;
 			transition: all 0.2s;
 		}
 
@@ -64,7 +64,7 @@
 		}
 
 		.expand-left-panel {
-			width: 100%;
+			min-width: 100%;
 		}
 	}
 
@@ -78,18 +78,15 @@
 		pointer-events: auto;
 
 		.music-controls {
-			display: flex;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
 			height: 100%;
 			width: 100%;
 
-			justify-content: space-between;
 			align-items: center;
-			display: flex;
 
 			.music-controls-left {
 				display: flex;
-				width: 52%;
-				justify-content: space-between;
 
 				.music-controls-left-box {
 					display: flex;
@@ -131,11 +128,12 @@
 						}
 					}
 				}
+			}
 
-				.music-controls-btns {
-					display: flex;
-					margin-left: 2em;
-				}
+			.music-controls-btns {
+				display: flex;
+				justify-content: center;
+				margin-left: 2em;
 			}
 
 			.music-controls-right {

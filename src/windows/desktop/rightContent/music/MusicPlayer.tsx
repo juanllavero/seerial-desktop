@@ -4,6 +4,8 @@ import { Slider } from "primereact/slider";
 import ReactHowler from "react-howler";
 import { useEffect, useRef, useState } from "react";
 import {
+	playNextSong,
+	playPrevSong,
 	setCurrentSong,
 	setSongs,
 	toggleMusicPause,
@@ -23,6 +25,7 @@ import {
 } from "@components/utils/IconLibrary";
 import "./MusicPlayer.scss";
 import { useDataContext } from "context/data.context";
+import Image from "@components/image/Image";
 
 function MusicPlayer() {
 	const dispatch = useDispatch();
@@ -54,6 +57,10 @@ function MusicPlayer() {
 	);
 	const [gradientBackground, setGradientBackground] = useState<string>("");
 
+	const currentImage = useSelector(
+		(state: RootState) => state.musicPlayer.currentImage
+	);
+
 	// Función para actualizar el tiempo de reproducción
 	const updateTime = () => {
 		if (howlerRef.current) {
@@ -64,8 +71,14 @@ function MusicPlayer() {
 	};
 
 	useEffect(() => {
+		if (currentSong !== -1) {
+			setHidePlayer(false);
+		}
+	}, [currentSong]);
+
+	useEffect(() => {
 		if (songsList && currentSong !== -1) {
-			const imgSrc = songsList[currentSong].imgSrc;
+			const imgSrc = currentImage;
 
 			if (imgSrc !== "") {
 				ReactUtils.getDominantColors(imgSrc);
@@ -89,7 +102,7 @@ function MusicPlayer() {
 				}, 200);
 			}, 300);
 		}
-	}, [currentSong, songsList]);
+	}, [currentImage]);
 
 	// Capturar la tecla "Espacio" y despachar la acción de pausar o reanudar la música
 	useEffect(() => {
@@ -125,11 +138,6 @@ function MusicPlayer() {
 			return () => clearInterval(interval);
 		}
 	}, [paused, duration]);
-
-	useEffect(() => {
-		// Comprobar si hay letas
-		dispatch(changeMenuSection(WindowSections.Details));
-	}, [hidePlayer]);
 
 	// Manejar la carga del archivo y establecer la duración
 	const handleLoad = () => {
@@ -186,17 +194,11 @@ function MusicPlayer() {
 							showMore ? "" : "expand-left-panel"
 						}`}
 					>
-						<img
-							src={
-								songsList && currentSong !== -1
-									? songsList[currentSong].imgSrc
-									: "/img/songDefault.png"
-							}
-							alt="Song Cover"
-							onError={(e: any) => {
-								e.target.onerror = null;
-								e.target.src = "/img/songDefault.png";
-							}}
+						<Image
+							src={currentImage}
+							alt={currentImage}
+							errorSrc="/img/songDefault.png"
+							isRelative={true}
 						/>
 						<div className="left-panel-info">
 							{songsList && currentSong !== -1 ? (
@@ -255,20 +257,6 @@ function MusicPlayer() {
 										<div className="music-player-item">
 											<div className="music-player-item-left song-row">
 												<div className="song-image-container">
-													<img
-														loading="lazy"
-														src={song.imgSrc}
-														alt="Song Image"
-														style={{
-															width: `50px`,
-															height: `50px`,
-														}}
-														onError={(e: any) => {
-															e.target.onerror = null;
-															e.target.src =
-																"/img/songDefault.png";
-														}}
-													/>
 													<div className="song-btn-overlay">
 														<button
 															onClick={() => {
@@ -323,18 +311,11 @@ function MusicPlayer() {
 					<div className="music-controls">
 						<div className="music-controls-left">
 							<div className="music-controls-left-box">
-								<img
-									src={
-										songsList && currentSong !== -1
-											? songsList[currentSong].imgSrc
-											: "/img/songDefault.png"
-									}
-									alt="Song Cover"
-									onError={(e: any) => {
-										e.target.onerror = null;
-										e.target.src =
-											"/img/songDefault.png";
-									}}
+								<Image
+									src={currentImage}
+									alt={currentImage}
+									errorSrc="/img/songDefault.png"
+									isRelative={true}
 								/>
 								<div className="music-controls-text">
 									<span id="music-title">
@@ -361,56 +342,57 @@ function MusicPlayer() {
 									</span>
 								</div>
 							</div>
-							<div className="music-controls-btns">
-								<button
-									className="svg-button-desktop-transparent"
-									onClick={(e) => {
-										const currentTime = howlerRef.current?.seek();
+						</div>
+						<div className="music-controls-btns">
+							<button
+								className="svg-button-desktop-transparent"
+								onClick={(e) => {
+									const currentTime = howlerRef.current?.seek();
 
-										if (
-											(currentTime && currentTime >= 3) ||
-											currentSong === 0
-										) {
-											howlerRef.current?.seek(0);
-										} else {
-											dispatch(setCurrentSong(currentSong - 1));
-										}
+									if (
+										(currentTime && currentTime >= 3) ||
+										currentSong === 0
+									) {
+										howlerRef.current?.seek(0);
+									} else {
+										dispatch(playPrevSong());
+									}
 
-										e.stopPropagation();
-									}}
-								>
-									<PrevTrackIcon />
-								</button>
-								<button
-									onClick={(e) => {
-										dispatch(toggleMusicPause());
-										e.stopPropagation();
-									}}
-									className="svg-button-desktop-transparent"
-								>
-									{paused ? <PlayIcon /> : <PauseIcon />}
-								</button>
-								<button
-									className="svg-button-desktop-transparent"
-									onClick={(e) => {
-										dispatch(setCurrentSong(currentSong + 1));
-										e.stopPropagation();
-									}}
-								>
-									<NextTrackIcon />
-								</button>
-								<button
-									onClick={(e) => {
-										if (!paused) dispatch(toggleMusicPause());
+									e.stopPropagation();
+								}}
+							>
+								<PrevTrackIcon />
+							</button>
+							<button
+								onClick={(e) => {
+									dispatch(toggleMusicPause());
+									e.stopPropagation();
+								}}
+								className="svg-button-desktop-transparent"
+							>
+								{paused ? <PlayIcon /> : <PauseIcon />}
+							</button>
+							<button
+								className="svg-button-desktop-transparent"
+								onClick={(e) => {
+									dispatch(playNextSong());
+									e.stopPropagation();
+								}}
+							>
+								<NextTrackIcon />
+							</button>
+							<button
+								onClick={(e) => {
+									if (!paused) dispatch(toggleMusicPause());
 
-										dispatch(setCurrentSong(-1));
-										e.stopPropagation();
-									}}
-									className="svg-button-desktop-transparent"
-								>
-									<StopIcon />
-								</button>
-							</div>
+									dispatch(setCurrentSong(-1));
+									setHidePlayer(true);
+									e.stopPropagation();
+								}}
+								className="svg-button-desktop-transparent"
+							>
+								<StopIcon />
+							</button>
 						</div>
 						<div
 							className="music-controls-right"

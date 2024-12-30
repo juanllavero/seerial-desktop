@@ -7,9 +7,9 @@ import "./RightPanel.scss";
 import CollectionsList from "./collections/CollectionsList";
 import DetailsSection from "./details/DetailsSection";
 import HomeSection from "./home/HomeSection";
-import MusicSection from "./music/MusicSection";
 import MusicDetails from "./music/MusicDetails";
 import NoContent from "./utils/NoContent";
+import MusicCards from "./music/MusicCards";
 
 /**
  * The RightPanel component is responsible for rendering the correct content
@@ -62,7 +62,7 @@ function RightPanel() {
 				<CollectionsList />
 			) : currentRightSection === RightPanelSections.MusicAlbums ||
 			  currentRightSection === RightPanelSections.MusicTable ? (
-				<MusicSection />
+				<MusicCards />
 			) : currentRightSection === RightPanelSections.Details ? (
 				<DetailsSection />
 			) : currentRightSection === RightPanelSections.MusicDetails ? (

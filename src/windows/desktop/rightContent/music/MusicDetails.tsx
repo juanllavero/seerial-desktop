@@ -7,7 +7,7 @@ import {
 } from "@redux/slices/contextMenuSlice";
 import { selectSeason, toggleSeasonWindow } from "@redux/slices/dataSlice";
 import { ContextMenu } from "primereact/contextmenu";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import {
 	EditIcon,
 	HorizontalDotsIcon,
@@ -93,40 +93,42 @@ function MusicDetails() {
 
 		if (!selectedAlbum) return;
 
+		// Crear un array global de todas las canciones ordenadas por disco y número de episodio
+		const allSongs =
+			selectedAlbum.episodes?.slice().sort((a, b) => {
+				if (a.seasonNumber === b.seasonNumber) {
+					return (a.episodeNumber ?? 0) - (b.episodeNumber ?? 0);
+				}
+				return a.seasonNumber - b.seasonNumber;
+			}) || [];
+
 		if (discs.length === 0) {
 			return (
 				<>
 					<span className="disc-text-title">
-						{selectedAlbum.episodes && selectedAlbum.episodes.length}{" "}
-						{t("tracks").toLowerCase()}
+						{allSongs.length} {t("tracks").toLowerCase()}
 					</span>
-					{selectedAlbum.episodes &&
-						selectedAlbum.episodes
-							.slice()
-							.sort((a, b) => {
-								const episodeNumberA = a.episodeNumber ?? 0; // Si es undefined o null, usa 0 como valor por defecto
-								const episodeNumberB = b.episodeNumber ?? 0;
-
-								return episodeNumberA - episodeNumberB;
-							})
-							.map((song: EpisodeData, index: number) => (
-								<SongItem key={song.id} song={song} index={index} />
-							))}
+					{allSongs.map((song: EpisodeData, globalIndex: number) => (
+						<SongItem key={globalIndex} song={song} index={globalIndex} />
+					))}
 				</>
 			);
 		} else {
 			return (
 				<>
 					{discs.map((disc: number) => (
-						<>
+						<React.Fragment key={disc}>
 							<span className="disc-text-title">Disc {disc}</span>
-							{selectedAlbum.episodes
+							{allSongs
 								.filter((song) => song.seasonNumber === disc)
-								.sort((a, b) => a.episodeNumber - b.episodeNumber)
-								.map((song: EpisodeData, index: number) => (
-									<SongItem key={song.id} song={song} index={index} />
+								.map((song: EpisodeData, globalIndex: number) => (
+									<SongItem
+										key={globalIndex}
+										song={song}
+										index={globalIndex}
+									/>
 								))}
-						</>
+						</React.Fragment>
 					))}
 				</>
 			);
