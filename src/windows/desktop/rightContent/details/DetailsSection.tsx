@@ -20,13 +20,11 @@ import { Suspense, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EpisodeList from "./EpisodeList";
 import {
-	AddToListIcon,
 	DownArrowIcon,
 	EditIcon,
 	HorizontalDotsIcon,
 	MarkWatchedIcon,
 	PlayIcon,
-	RemoveFromListIcon,
 	UnmarkWatchedIcon,
 	UpArrowIcon,
 } from "@components/utils/IconLibrary";
@@ -50,10 +48,6 @@ function DetailsSection() {
 	);
 	const seriesImageHeight = useSelector(
 		(state: RootState) => state.seriesImage.height
-	);
-	const transparentImageLoaded = useSelector(
-		(state: RootState) =>
-			state.transparentImageLoaded.isTransparentImageLoaded
 	);
 	const showCollectionPoster = useSelector(
 		(state: RootState) => state.data.showCollectionPoster
@@ -79,12 +73,6 @@ function DetailsSection() {
 
 	const changePoster = () => {
 		dispatch(setShowPoster(!showCollectionPoster));
-	};
-
-	const handleTransparentImageLoad = () => {
-		setTimeout(() => {
-			dispatch(loadTransparentImage());
-		}, 300);
 	};
 
 	const continueWatchingInfo = () => {
