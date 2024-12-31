@@ -8,7 +8,6 @@ import {
 	addSeason,
 	addSeries,
 	updateLibrary,
-	updateSeason,
 	updateSeries,
 } from "@redux/slices/dataSlice";
 
@@ -23,6 +22,7 @@ interface WebSocketsContextProps {
 	setSeriesReceived: React.Dispatch<React.SetStateAction<SeriesData | null>>;
 	downloadAudio: (elementId: string, url: string) => Promise<void>;
 	downloadVideo: (elementId: string, url: string) => Promise<void>;
+	connectWS: (ip: string) => void;
 }
 
 export const WebSocketsContext = React.createContext<
@@ -44,18 +44,25 @@ export const WebSocketsProvider = ({
 		React.useState<SeriesData | null>(null);
 
 	const [ws, setWS] = useState<WebSocket | null>(null);
+	const [wsConnected, setWSConnected] = useState<boolean>(false);
+
+	const connectWS = async (ip: string) => {
+		if (!wsConnected) {
+			setWS(new WebSocket(`ws://${ip}/ws`));
+		}
+	};
 
 	useEffect(() => {
 		if (!serverIP) return;
 
-		setWS(new WebSocket(`ws://${serverIP}/ws`));
+		connectWS(serverIP);
 	}, [serverIP]);
 
 	useEffect(() => {
 		if (!ws) return;
 
 		ws.onopen = () => {
-			console.log("WebSocket connected");
+			setWSConnected(true);
 		};
 
 		ws.onmessage = (event) => {
@@ -100,12 +107,15 @@ export const WebSocketsProvider = ({
 		ws.onclose = () => {
 			setDownloading(false);
 			setAnalyzing(false);
+			setWSConnected(false);
 		};
 	}, [ws]);
 
 	const downloadVideo = async (elementId: string, url: string) => {
 		setDownloadPercentage(0);
 		setDownloading(true);
+
+		await connectWS(serverIP);
 
 		fetch(`https:${serverIP}/downloadVideo`, {
 			method: "POST",
@@ -130,6 +140,8 @@ export const WebSocketsProvider = ({
 	const downloadAudio = async (elementId: string, url: string) => {
 		setDownloadPercentage(0);
 		setDownloading(true);
+
+		await connectWS(serverIP);
 
 		fetch(`https:${serverIP}/downloadMusic`, {
 			method: "POST",
@@ -164,6 +176,7 @@ export const WebSocketsProvider = ({
 				setSeriesReceived,
 				downloadAudio,
 				downloadVideo,
+				connectWS
 			}}
 		>
 			{children}

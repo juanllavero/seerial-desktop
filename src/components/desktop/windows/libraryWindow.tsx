@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuSection } from "redux/slices/menuSectionsSlice";
 import { RootState } from "redux/store";
-import { addLibrary, toggleLibraryEditWindow } from "redux/slices/dataSlice";
+import { toggleLibraryEditWindow } from "redux/slices/dataSlice";
 import { useTranslation } from "react-i18next";
 import { Library } from "@objects/Library";
 import {
@@ -20,6 +20,7 @@ import DialogCenterLeftPanel from "./utils/DialogCenterLeftPanel";
 import DialogCenterContent from "./utils/DialogCenterContent";
 import { useSettingsContext } from "context/settings.context";
 import { useDataContext } from "context/data.context";
+import { useWebSocketsContext } from "context/ws.context";
 
 function LibraryWindow() {
 	const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function LibraryWindow() {
 	const [addLibraryMode, setAddLibraryMode] = useState<boolean>(true);
 
 	const { serverIP } = useDataContext();
+	const { connectWS } = useWebSocketsContext();
 	const { getLanguageName } = useSettingsContext();
 
 	const menuSection = useSelector(
@@ -75,6 +77,8 @@ function LibraryWindow() {
 		if (folders.length === 0) {
 			console.log("Error folder");
 		} else {
+			await connectWS(serverIP);
+
 			if (addLibraryMode) {
 				const newLibrary = new Library(name, language, type, 0, folders);
 
