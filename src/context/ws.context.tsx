@@ -46,9 +46,26 @@ export const WebSocketsProvider = ({
 	const [ws, setWS] = useState<WebSocket | null>(null);
 	const [wsConnected, setWSConnected] = useState<boolean>(false);
 
-	const connectWS = async (ip: string) => {
+	const connectWS = async (ip: string): Promise<void> => {
 		if (!wsConnected) {
-			setWS(new WebSocket(`ws://${ip}/ws`));
+			return new Promise((resolve, reject) => {
+				const websocket = new WebSocket(`ws://${ip}/ws`);
+	
+				websocket.onopen = () => {
+					setWSConnected(true);
+					setWS(websocket);
+					resolve(); // Resolve promise when connection is established
+				};
+	
+				websocket.onerror = (err) => {
+					reject(err); // Reject promise on error
+				};
+	
+				websocket.onclose = () => {
+					setWSConnected(false);
+					setWS(null);
+				};
+			});
 		}
 	};
 
