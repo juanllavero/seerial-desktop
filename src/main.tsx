@@ -10,21 +10,24 @@ import { DownloadProvider } from "context/download.context";
 import { DataProvider } from "context/data.context";
 import { SettingsProvider } from "context/settings.context";
 import { WebSocketsProvider } from "context/ws.context";
+import { MetadataProvider } from "context/metadata.context";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-	<PrimeReactProvider>
-		<Provider store={store}>
-			<SectionProvider>
-				<DataProvider>
-					<WebSocketsProvider>
-						<DownloadProvider>
-							<SettingsProvider>
-								<MainDesktop />
-							</SettingsProvider>
-						</DownloadProvider>
-					</WebSocketsProvider>
-				</DataProvider>
-			</SectionProvider>
-		</Provider>
-	</PrimeReactProvider>
+  <PrimeReactProvider>
+    <Provider store={store}>
+      <SectionProvider>
+        <DataProvider>
+          <WebSocketsProvider>
+            <DownloadProvider>
+              <SettingsProvider>
+                <MetadataProvider>
+                  <MainDesktop />
+                </MetadataProvider>
+              </SettingsProvider>
+            </DownloadProvider>
+          </WebSocketsProvider>
+        </DataProvider>
+      </SectionProvider>
+    </Provider>
+  </PrimeReactProvider>
 );

@@ -1,5 +1,5 @@
-import FormTemplate from "@components/desktop/form-template/FormTemplate";
-import MainButton from "@components/desktop/MainButton";
+import FormTemplate from "@components/form-template/FormTemplate";
+import MainButton from "@components/MainButton";
 import { useTranslation } from "react-i18next";
 
 function ServerLibrariesSettings() {

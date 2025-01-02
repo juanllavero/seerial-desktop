@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { loadImage, removeImage } from "../../redux/slices/imageLoadedSlice";
+import { RootState } from "../redux/store";
+import { loadImage, removeImage } from "../redux/slices/imageLoadedSlice";
 import Image from "@components/image/Image";
 import React, { useEffect, useState } from "react";
 

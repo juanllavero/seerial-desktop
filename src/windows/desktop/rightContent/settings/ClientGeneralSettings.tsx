@@ -1,7 +1,7 @@
-import CheckBox from "@components/desktop/form-template/CheckBox";
-import FormItem from "@components/desktop/form-template/FormItem";
-import FormTemplate from "@components/desktop/form-template/FormTemplate";
-import Select from "@components/desktop/form-template/Select";
+import CheckBox from "@components/form-template/CheckBox";
+import FormItem from "@components/form-template/FormItem";
+import FormTemplate from "@components/form-template/FormTemplate";
+import Select from "@components/form-template/Select";
 import { useSettingsContext } from "context/settings.context";
 import i18n from "i18n";
 import { useTranslation } from "react-i18next";

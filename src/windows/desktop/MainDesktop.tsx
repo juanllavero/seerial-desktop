@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import MainBackgroundImage from "@components/desktop/mainBackgroundImage";
+import MainBackgroundImage from "@components/mainBackgroundImage";
 import {
 	addEpisode,
 	addSeason,
@@ -23,21 +23,23 @@ import { SeriesData } from "@interfaces/SeriesData";
 import { SeasonData } from "@interfaces/SeasonData";
 import { EpisodeData } from "@interfaces/EpisodeData";
 import TopBar from "./rightContent/utils/TopBar";
-import EpisodeWindow from "@components/desktop/windows/episodeWindow";
-import LibraryWindow from "@components/desktop/windows/libraryWindow";
-import SeasonWindow from "@components/desktop/windows/seasonWindow";
-import SeriesWindow from "@components/desktop/windows/seriesWindow";
+import EpisodeWindow from "@components/windows/episodeWindow";
+import LibraryWindow from "@components/windows/libraryWindow";
+import SeasonWindow from "@components/windows/seasonWindow";
+import SeriesWindow from "@components/windows/seriesWindow";
 import MusicPlayer from "windows/desktop/rightContent/music/MusicPlayer";
 import { useDataContext } from "context/data.context";
 import StatusRightPanelMessage from "./rightContent/StatusRightPanelMessage";
 import StatusRightPanelMessageAPI from "./rightContent/StatusRightPanelMessageAPI";
 import RightContent from "./rightContent/RightContent";
 import LeftPanel from "./leftContent/LeftPanel";
-import AddServer from "@components/desktop/windows/AddServer";
+import AddServer from "@components/windows/AddServer";
 import ConfigManager from "@data/utils/Configuration";
 import { LeftPanelSections } from "@data/enums/Sections";
 import { useSectionContext } from "context/section.context";
 import SettingsRightPanel from "./rightContent/SettingsRightPanel";
+import CorrectIdentification from "@components/metadataSearch/CorrectIdentification";
+import EpisodeGroups from "@components/metadataSearch/EpisodeGroups";
 
 function MainDesktop() {
 	const dispatch = useDispatch();
@@ -186,6 +188,8 @@ function MainDesktop() {
 			<SeasonWindow />
 			<EpisodeWindow />
 			<AddServer />
+			<CorrectIdentification />
+			<EpisodeGroups />
 
 			<div
 				className={`gradient-background ${gradientLoaded ? "fade-in" : ""}`}

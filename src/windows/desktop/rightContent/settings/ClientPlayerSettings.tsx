@@ -1,4 +1,4 @@
-import FormTemplate from "@components/desktop/form-template/FormTemplate";
+import FormTemplate from "@components/form-template/FormTemplate";
 import { useTranslation } from "react-i18next";
 
 function ClientPlayerSettings() {

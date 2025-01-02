@@ -1,5 +1,5 @@
 import "./StatusRightPanelMessage.scss";
-import MainButton from "@components/desktop/MainButton";
+import MainButton from "@components/MainButton";
 
 function StatusRightPanelMessage({
 	title,

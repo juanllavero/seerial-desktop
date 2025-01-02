@@ -1,6 +1,6 @@
 import { useDataContext } from "context/data.context";
 import "./StatusRightPanelMessage.scss";
-import MainButton from "@components/desktop/MainButton";
+import MainButton from "@components/MainButton";
 import { useState } from "react";
 
 function StatusRightPanelMessageAPI({

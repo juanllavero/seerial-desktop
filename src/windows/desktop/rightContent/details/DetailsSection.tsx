@@ -30,9 +30,11 @@ import {
 } from "@components/utils/IconLibrary";
 import "./DetailsSection.scss";
 import Loading from "@components/utils/Loading";
+import { useMetadataContext } from "context/metadata.context";
 
 function DetailsSection() {
 	const dispatch = useDispatch();
+	const { setShowCIWindow } = useMetadataContext();
 
 	const selectedLibrary = useSelector(
 		(state: RootState) => state.data.selectedLibrary
@@ -341,8 +343,10 @@ function DetailsSection() {
 											? [
 													{
 														label: t("correctIdentification"),
-														command: () =>
-															dispatch(toggleSeasonMenu()),
+														command: () => {
+															setShowCIWindow(true);
+															dispatch(toggleSeasonMenu());
+														},
 													},
 											  ]
 											: []),

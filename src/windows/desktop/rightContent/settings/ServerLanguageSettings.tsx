@@ -1,7 +1,7 @@
-import FormItem from "@components/desktop/form-template/FormItem";
-import FormTemplate from "@components/desktop/form-template/FormTemplate";
-import Select from "@components/desktop/form-template/Select";
-import MainButton from "@components/desktop/MainButton";
+import FormItem from "@components/form-template/FormItem";
+import FormTemplate from "@components/form-template/FormTemplate";
+import Select from "@components/form-template/Select";
+import MainButton from "@components/MainButton";
 import { useSettingsContext } from "context/settings.context";
 import React from "react";
 import { useTranslation } from "react-i18next";

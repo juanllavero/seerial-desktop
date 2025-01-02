@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Card.scss";
 import Image from "@components/image/Image";
 import {
-	closeAllMenus,
 	closeContextMenu,
 	toggleSeriesMenu,
 } from "@redux/slices/contextMenuSlice";
@@ -18,13 +17,14 @@ import {
 } from "@redux/slices/dataSlice";
 import { t } from "i18next";
 import { ContextMenu } from "primereact/contextmenu";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { EditIcon, VerticalDotsIcon } from "@components/utils/IconLibrary";
 import { LibraryData } from "@interfaces/LibraryData";
 import { ReactUtils } from "@data/utils/ReactUtils";
 import { useSectionContext } from "context/section.context";
 import { RightPanelSections } from "@data/enums/Sections";
 import { useDataContext } from "context/data.context";
+import { useMetadataContext } from "context/metadata.context";
 
 interface CardProps {
 	library?: LibraryData;
@@ -45,15 +45,10 @@ interface CardProps {
  */
 function Card(props: CardProps): JSX.Element {
 	const dispatch = useDispatch();
+	const { setShowCIWindow, setShowEGWindow } = useMetadataContext();
 	const { serverIP } = useDataContext();
 	const { setCurrentRightSection } = useSectionContext();
 	const { library, show, season, type } = props;
-	const seriesImageWidth = useSelector(
-		(state: RootState) => state.seriesImage.width
-	);
-	const seriesImageHeight = useSelector(
-		(state: RootState) => state.seriesImage.height
-	);
 
 	const cm = useRef<ContextMenu | null>(null);
 
@@ -247,7 +242,10 @@ function Card(props: CardProps): JSX.Element {
 						? [
 								{
 									label: t("correctIdentification"),
-									command: () => dispatch(toggleSeriesMenu()),
+									command: () => {
+										setShowCIWindow(true);
+										dispatch(toggleSeriesMenu());
+									},
 								},
 						  ]
 						: []),
@@ -255,7 +253,10 @@ function Card(props: CardProps): JSX.Element {
 						? [
 								{
 									label: t("changeEpisodesGroup"),
-									command: () => dispatch(toggleSeriesMenu()),
+									command: () => {
+										setShowEGWindow(true);
+										dispatch(toggleSeriesMenu());
+									},
 								},
 						  ]
 						: []),
