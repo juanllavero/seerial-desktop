@@ -107,10 +107,10 @@ function MusicPlayer() {
 	// Capturar la tecla "Espacio" y despachar la acción de pausar o reanudar la música
 	useEffect(() => {
 		const handleKeyPress = (event: KeyboardEvent) => {
-			if (event.code === "Space") {
-				event.preventDefault(); // Prevenir el scroll por defecto al presionar espacio
-				dispatch(toggleMusicPause());
-			}
+			// if (event.code === "Space") {
+			// 	event.preventDefault(); // Prevenir el scroll por defecto al presionar espacio
+			// 	dispatch(toggleMusicPause());
+			// }
 		};
 
 		window.addEventListener("keydown", handleKeyPress);

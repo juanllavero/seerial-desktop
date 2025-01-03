@@ -3,7 +3,7 @@
   padding: 0 4rem 4rem 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  overflow-y: auto;
+  overflow-y: scroll;
 
   gap: 0.8em;
 }

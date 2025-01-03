@@ -1,0 +1,43 @@
+.result-card {
+	display: flex;
+	flex-flow: row nowrap;
+
+   padding: 1rem;
+
+   cursor: pointer;
+	gap: 0.8em;
+
+	img {
+		width: auto;
+		height: 10rem;
+	}
+
+	.result-info {
+		display: flex;
+		flex-flow: column nowrap;
+		text-align: left;
+
+		width: 100%;
+
+		#title {
+			font-weight: bold;
+         margin-bottom: .2rem;
+		}
+
+		// #date {
+
+		// }
+
+		#description {
+         margin-top: .5rem;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 4;
+			overflow: hidden;
+		}
+	}
+
+   &:hover {
+      background-color: rgba(0, 0, 0, 0.61);
+   }
+}

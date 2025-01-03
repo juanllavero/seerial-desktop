@@ -1,5 +1,10 @@
 @use "./variables" as v;
 
+.no-results {
+	text-align: center;
+	padding-top: 2rem;
+}
+
 .a_text {
 	position: relative;
 	margin-top: 10px;

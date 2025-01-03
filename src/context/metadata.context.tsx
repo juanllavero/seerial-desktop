@@ -67,7 +67,13 @@ export const MetadataProvider = ({
     fetch(`https://${serverIP}/${isShow ? 'shows' : 'movies'}/search?name=${name}&year=${year}`)
       .then((response) => response.json())
       .then((data) => {
-        setIdentificationResults(data);
+        setIdentificationResults(data.map((item: any) => ({ 
+          id: item.id,
+          title: item.name || item.title,
+          overview: item.overview,
+          date: item.first_air_date || item.release_date,
+          poster: item.poster_path,
+         })));
         setLoaded(true);
       })
       .catch((_error) => setIdentificationResults([]))

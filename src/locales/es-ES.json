@@ -209,5 +209,6 @@
     "libraries": "Bibliotecas",
     "transcode": "Transcodificación",
     "serverIP": "IP del servidor",
-    "serverIPText": "El puerto ha de ser el 3000"
+    "serverIPText": "El puerto ha de ser el 3000",
+    "noResults": "No se han encontrado resultados"
   }

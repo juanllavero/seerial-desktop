@@ -6,7 +6,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next';
 import VerticalResults from './utils/VerticalResults';
 import EpisodeGroupResult from './utils/EpisodeGroupResult';
-import Loading from '@components/utils/Loading';
+import DialogLoading from '@components/utils/DialogLoading';
 
 function EpisodeGroups() {
   const { t } = useTranslation();
@@ -28,10 +28,12 @@ function EpisodeGroups() {
                     ))
                   }
                 </VerticalResults>
-              ) : (
-                <Loading />
-              )
-            }
+              ) : (loaded && !episodeGroupsResults) ||
+              (loaded && episodeGroupsResults.length === 0) ? (
+              <span className="no-results">{t('noResults')}</span>
+            ) : (
+              <DialogLoading />
+            )}
           </DialogCenterContent>
         </DialogCenter>
       </DialogTemplate>
