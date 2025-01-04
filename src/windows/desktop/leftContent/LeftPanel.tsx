@@ -6,6 +6,7 @@ import {
 import {
 	resetSelection,
 	selectLibrary,
+	setLibraries,
 	toggleLibraryEditWindow,
 } from "@redux/slices/dataSlice";
 import LibrariesList from "./LibrariesList";
@@ -23,9 +24,11 @@ import { ContextMenu } from "primereact/contextmenu";
 import { RootState } from "@redux/store";
 import { confirmDialog } from "primereact/confirmdialog";
 import { ReactUtils } from "@data/utils/ReactUtils";
+import { useDataContext } from "context/data.context";
 
 function LeftPanel() {
 	const dispatch = useDispatch();
+	const { serverIP } = useDataContext();
 	const { currentLeftSection, setCurrentLeftSection, setCurrentRightSection } =
 		useSectionContext();
 	const [menuContracted, setMenuContracted] = useState<boolean>(false);
@@ -141,7 +144,17 @@ function LeftPanel() {
 
 	const accept = () => {
 		if (libraryForMenu) {
-			window.electronAPI.deleteLibrary(libraryForMenu);
+			// Delete library in server
+			fetch(`https://${serverIP}/libraries/${libraryForMenu.id}`, {
+				method: "DELETE",
+			});
+
+			// Update libraries in client
+			dispatch(
+				setLibraries(
+					libraries.filter((library) => library.id !== libraryForMenu.id)
+				)
+			);
 		}
 	};
 
