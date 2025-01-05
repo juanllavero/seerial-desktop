@@ -10,6 +10,14 @@ import HomeSection from "./home/HomeSection";
 import MusicDetails from "./music/MusicDetails";
 import NoContent from "./utils/NoContent";
 import MusicCards from "./music/MusicCards";
+import { useDataContext } from "context/data.context";
+import {
+	markEpisodeWatched,
+	selectSeason,
+	setSeasonWatched,
+	setSeriesWatched,
+	updateEpisode,
+} from "@redux/slices/dataSlice";
 
 /**
  * The RightPanel component is responsible for rendering the correct content
@@ -19,6 +27,7 @@ import MusicCards from "./music/MusicCards";
  * @returns The correct content based on the selected library and series.
  */
 function RightPanel() {
+	const { serverIP } = useDataContext();
 	const { currentRightSection, setCurrentRightSection } = useSectionContext();
 
 	const selectedLibrary = useSelector(
@@ -26,6 +35,15 @@ function RightPanel() {
 	);
 	const selectedSeries = useSelector(
 		(state: RootState) => state.data.selectedSeries
+	);
+	const seriesForMenu = useSelector(
+		(state: RootState) => state.data.seriesMenu
+	);
+	const selectedSeason = useSelector(
+		(state: RootState) => state.data.selectedSeason
+	);
+	const selectedEpisode = useSelector(
+		(state: RootState) => state.data.selectedEpisode
 	);
 	const previousLibraryId = useRef<string | null>(null);
 	const previousSeriesId = useRef<string | null>(null);

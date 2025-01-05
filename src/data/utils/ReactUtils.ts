@@ -55,15 +55,21 @@ export class ReactUtils {
 	) => {
 		if (collection && !album) {
 			if (collection.coverSrc !== "") {
-				ReactUtils.getDominantColors(`https://${serverIP}/${collection.coverSrc}`);
+				ReactUtils.getDominantColors(
+					`https://${serverIP}/${collection.coverSrc}`
+				);
 			} else {
 				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
 		} else if (collection && album) {
 			if (album.coverSrc !== "") {
-				ReactUtils.getDominantColors(`https://${serverIP}/${album.coverSrc}`);
+				ReactUtils.getDominantColors(
+					`https://${serverIP}/${album.coverSrc}`
+				);
 			} else if (collection.coverSrc !== "") {
-				ReactUtils.getDominantColors(`https://${serverIP}/${collection.coverSrc}`);
+				ReactUtils.getDominantColors(
+					`https://${serverIP}/${collection.coverSrc}`
+				);
 			} else {
 				ReactUtils.getDominantColors("/img/songDefault.png");
 			}
@@ -151,6 +157,30 @@ export class ReactUtils {
 		}
 	};
 	//#endregion
+
+	/**
+	 * 	Update series in server
+	 * @param serverIP 
+	 * @param libraryId 
+	 * @param series 
+	 */
+	public static updateSeries = (
+		serverIP: string,
+		libraryId: string,
+		series: SeriesData
+	) => {
+		fetch(`https://${serverIP}/show`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				libraryId: libraryId,
+				showId: series.id,
+				updatedShow: series,
+			}),
+		});
+	};
 
 	/**
 	 * This method saves the provided libraries data in a JSON file.

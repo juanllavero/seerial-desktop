@@ -33,7 +33,7 @@ export function MainBackgroundImage() {
 		return (
 			<div className="main-background">
 				<Image
-					src={`img/backgrounds/${selectedSeason.id}/background.jpg?t=${cacheBuster}`}
+					src={selectedSeason.backgroundSrc}
 					onLoad={handleImageLoad}
 					className={imageLoaded ? "loaded" : ""}
 					alt="Background"
