@@ -183,6 +183,27 @@ export class ReactUtils {
 	};
 
 	/**
+	 * 	Update library in server
+	 * @param serverIP 
+	 * @param library
+	 */
+	public static updateLibrary = (
+		serverIP: string,
+		library: LibraryData,
+	) => {
+		fetch(`https://${serverIP}/library`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				libraryId: library.id,
+				updatedLibrary: library,
+			}),
+		});
+	};
+
+	/**
 	 * This method saves the provided libraries data in a JSON file.
 	 * @param newData - Array of LibraryData to be saved.
 	 */

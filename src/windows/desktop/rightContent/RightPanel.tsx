@@ -11,13 +11,7 @@ import MusicDetails from "./music/MusicDetails";
 import NoContent from "./utils/NoContent";
 import MusicCards from "./music/MusicCards";
 import { useDataContext } from "context/data.context";
-import {
-	markEpisodeWatched,
-	selectSeason,
-	setSeasonWatched,
-	setSeriesWatched,
-	updateEpisode,
-} from "@redux/slices/dataSlice";
+import { ReactUtils } from "@data/utils/ReactUtils";
 
 /**
  * The RightPanel component is responsible for rendering the correct content
@@ -36,17 +30,20 @@ function RightPanel() {
 	const selectedSeries = useSelector(
 		(state: RootState) => state.data.selectedSeries
 	);
-	const seriesForMenu = useSelector(
-		(state: RootState) => state.data.seriesMenu
-	);
-	const selectedSeason = useSelector(
-		(state: RootState) => state.data.selectedSeason
-	);
-	const selectedEpisode = useSelector(
-		(state: RootState) => state.data.selectedEpisode
-	);
 	const previousLibraryId = useRef<string | null>(null);
 	const previousSeriesId = useRef<string | null>(null);
+
+	useEffect(() => {
+		if (!selectedLibrary) return;
+		
+		// Check if the id has changed
+		if (previousLibraryId.current === selectedLibrary.id) {
+			console.log("Updating library");
+			ReactUtils.updateLibrary(serverIP, selectedLibrary);
+		} else {
+			previousLibraryId.current = selectedLibrary.id; // Update previous id
+		}
+	}, [selectedLibrary]);
 
 	useEffect(() => {
 		setCurrentRightSection(RightPanelSections.Home);
