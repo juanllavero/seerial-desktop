@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+    "@tailwindcss/vite": "^4.0.6",
     "@types/i18next": "^12.1.0",
     "@types/node": "^22.4.1",
     "@types/react-i18next": "^7.8.3",
@@ -31,6 +32,7 @@
     "react-player": "^2.16.0",
     "react-redux": "^9.1.2",
     "react-tag-input-component": "^2.0.2",
+    "tailwindcss": "^4.0.6",
     "uninstall": "^0.0.0",
     "vite-tsconfig-paths": "^5.0.1",
     "ws": "^8.18.0"
